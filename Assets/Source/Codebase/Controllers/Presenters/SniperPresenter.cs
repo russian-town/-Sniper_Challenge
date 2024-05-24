@@ -35,16 +35,28 @@ namespace Source.Root
         private void OnAimButtonDown()
         {
             if (_aim != null)
-                _coroutineRunner.StopCoroutine(_aim);
+                return;
 
             _aim = _coroutineRunner.StartCoroutine(Aim());
         }
 
         private IEnumerator Aim()
         {
-            yield return new WaitForSeconds(_view.AimComeIn());
+            if(_sniper.InAim == false)
+            {
+                float animationLenht = _view.EnterToAim();
+                _aimingService.EnterToAim(animationLenht);
+                yield return new WaitForSeconds(animationLenht);
+                _sniper.EnterToAim();
+            }
+            else
+            {
+                _aimingService.ExitOfAim();
+                yield return new WaitForSeconds(_view.ExitOfAim());
+                _sniper.ExitOfAim();
+            }
+
             _aim = null;
-            _aimingService.Aim();
         }
     }
 }

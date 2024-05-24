@@ -3,21 +3,25 @@ using UnityEngine;
 
 public class CompossitionRoot : MonoBehaviour
 {
-    [SerializeField] private DesktopInput _desktopInput;
     [SerializeField] private CoroutineRunner _coroutineRunner;
+    [SerializeField] private DesktopInput _desktopInput;
+    [SerializeField] private InputConfig _inputConfig;
+    [SerializeField] private InputData _inputData;
 
     [SerializeField] private ScopeView _scopeView;
     [SerializeField] private SniperView _sniperView;
+    [SerializeField] private CameraView _cameraView;
 
     private void Awake()
     {
-        MobileInpute mobileInpute = new();
-        AimingService aimingService = new();
+        CameraPresenter cameraPresenter = new(_cameraView, _desktopInput, _inputConfig, _inputData);
+        _cameraView.Construct(cameraPresenter);
+        AimingService aimingServices = new();
         Scope scope = new();
-        ScopePresenter scopePresenter = new(scope, _scopeView, aimingService);
+        ScopePresenter scopePresenter = new(scope, _scopeView, aimingServices, _coroutineRunner);
         _scopeView.Construct(scopePresenter);
         Sniper sniper = new();
-        SniperPresenter sniperPresenter = new(sniper, _sniperView, _desktopInput, _coroutineRunner, aimingService);
+        SniperPresenter sniperPresenter = new(sniper, _sniperView, _desktopInput, _coroutineRunner, aimingServices);
         _sniperView.Construct(sniperPresenter);
     }
 }

@@ -6,6 +6,7 @@ namespace Source.Root
     {
         public event Action AimButtonDown;
         public event Action AimButtonUp;
+        public event Action<float, float> AxisMoved;
 
         public void Update()
         {
