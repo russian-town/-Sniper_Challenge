@@ -16,12 +16,12 @@ public class CompossitionRoot : MonoBehaviour
     {
         CameraPresenter cameraPresenter = new(_cameraView, _desktopInput, _inputConfig, _inputData);
         _cameraView.Construct(cameraPresenter);
-        AimingService aimingServices = new();
+        GameLoopService gameLoopService = new();
         Scope scope = new();
-        ScopePresenter scopePresenter = new(scope, _scopeView, aimingServices, _coroutineRunner);
+        ScopePresenter scopePresenter = new(scope, _scopeView, gameLoopService, _coroutineRunner);
         _scopeView.Construct(scopePresenter);
         Sniper sniper = new();
-        SniperPresenter sniperPresenter = new(sniper, _sniperView, _desktopInput, _coroutineRunner, aimingServices);
+        SniperPresenter sniperPresenter = new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService);
         _sniperView.Construct(sniperPresenter);
     }
 }

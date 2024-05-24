@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Source.Root
@@ -21,6 +22,11 @@ namespace Source.Root
         {
             _animator.SetBool(AimParameter, false);
             return _aimExitClip.length / _animator.GetFloat(SpeedMultiplierParameter);
+        }
+
+        internal void Shoot()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,31 +10,31 @@ namespace Source.Root
 
         private readonly Scope _scope;
         private readonly ScopeView _scopeView;
-        private readonly AimingService _aimingServices;
+        private readonly GameLoopService _gameLoopService;
         private readonly Camera _camera;
         private readonly ICoroutineRunner _coroutineRunner;
 
         private Coroutine _zoomCamera;
 
-        public ScopePresenter(Scope scope, ScopeView scopeView, AimingService aimingServices, ICoroutineRunner coroutineRunner)
+        public ScopePresenter(Scope scope, ScopeView scopeView, GameLoopService gameLoopService, ICoroutineRunner coroutineRunner)
         {
             _scope = scope;
             _scopeView = scopeView;
-            _aimingServices = aimingServices;
+            _gameLoopService = gameLoopService;
             _camera = Camera.main;
             _coroutineRunner = coroutineRunner;
         }
 
         public void Enable()
         {
-            _aimingServices.AimEnter += OnAimEnter;
-            _aimingServices.AimExit += OnAimExit;
+            _gameLoopService.AimEnter += OnAimEnter;
+            _gameLoopService.AimExit += OnAimExit;
         }
 
         public void Disable()
         {
-            _aimingServices.AimEnter -= OnAimEnter;
-            _aimingServices.AimExit -= OnAimExit;
+            _gameLoopService.AimEnter -= OnAimEnter;
+            _gameLoopService.AimExit -= OnAimExit;
         }
 
         private void OnAimEnter(float animationLenht)

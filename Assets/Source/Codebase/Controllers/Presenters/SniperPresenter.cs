@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,29 +9,29 @@ namespace Source.Root
         private readonly SniperView _view;
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly IInput _input;
-        private readonly AimingService _aimingService;
+        private readonly GameLoopService _gameLoopService;
 
         private Coroutine _aim;
 
-        public SniperPresenter(Sniper sniper, SniperView view, IInput input, ICoroutineRunner coroutineRunner, AimingService aimingService)
+        public SniperPresenter(Sniper sniper, SniperView view, IInput input, ICoroutineRunner coroutineRunner, GameLoopService gameLoopService)
         {
             _sniper = sniper;
             _view = view;
             _input = input;
             _coroutineRunner = coroutineRunner;
-            _aimingService = aimingService;
+            _gameLoopService = gameLoopService;
         }
 
         public void Enable()
         {
             _input.AimButtonDown += OnAimButtonDown;
-            _input.ShootButtonDown += OnShootButtonDown;
+            _gameLoopService.Shot += OnShot;
         }
 
         public void Disable()
         {
             _input.AimButtonDown -= OnAimButtonDown;
-            _input.ShootButtonDown -= OnShootButtonDown;
+            _gameLoopService.Shot -= OnShot;
         }
 
         private void OnAimButtonDown()
@@ -43,9 +42,10 @@ namespace Source.Root
             _aim = _coroutineRunner.StartCoroutine(Aim());
         }
 
-        private void OnShootButtonDown()
+        private void OnShot()
         {
-            
+            _sniper.Shoot();
+            _view.Shoot();
         }
 
         private IEnumerator Aim()
@@ -53,13 +53,13 @@ namespace Source.Root
             if(_sniper.InAim == false)
             {
                 float animationLenht = _view.EnterToAim();
-                _aimingService.EnterToAim(animationLenht);
+                _gameLoopService.EnterToAim(animationLenht);
                 yield return new WaitForSeconds(animationLenht);
                 _sniper.EnterToAim();
             }
             else
             {
-                _aimingService.ExitOfAim();
+                _gameLoopService.ExitOfAim();
                 yield return new WaitForSeconds(_view.ExitOfAim());
                 _sniper.ExitOfAim();
             }

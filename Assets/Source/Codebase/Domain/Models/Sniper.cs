@@ -9,5 +9,10 @@ namespace Source.Root
 
         public void ExitOfAim()
             => InAim = false;
+
+        public void Shoot()
+        {
+
+        }
     }
 }
