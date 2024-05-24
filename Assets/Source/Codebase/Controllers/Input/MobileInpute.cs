@@ -1,15 +1,12 @@
 using System;
+using UnityEngine;
 
 namespace Source.Root
 {
-    public class MobileInpute : IInput, IUpdatable
+    public class MobileInpute : MonoBehaviour, IInput
     {
         public event Action AimButtonDown;
-        public event Action AimButtonUp;
+        public event Action ShootButtonDown;
         public event Action<float, float> AxisMoved;
-
-        public void Update()
-        {
-        }
     }
 }

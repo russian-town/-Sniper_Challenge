@@ -9,7 +9,7 @@ namespace Source.Root
         private const string MouseYAxis = "Mouse Y";
 
         public event Action AimButtonDown;
-        public event Action AimButtonUp;
+        public event Action ShootButtonDown;
         public event Action<float, float> AxisMoved;
 
         private void Update()

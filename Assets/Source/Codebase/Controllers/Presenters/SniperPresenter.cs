@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -25,11 +26,13 @@ namespace Source.Root
         public void Enable()
         {
             _input.AimButtonDown += OnAimButtonDown;
+            _input.ShootButtonDown += OnShootButtonDown;
         }
 
         public void Disable()
         {
             _input.AimButtonDown -= OnAimButtonDown;
+            _input.ShootButtonDown -= OnShootButtonDown;
         }
 
         private void OnAimButtonDown()
@@ -38,6 +41,11 @@ namespace Source.Root
                 return;
 
             _aim = _coroutineRunner.StartCoroutine(Aim());
+        }
+
+        private void OnShootButtonDown()
+        {
+            
         }
 
         private IEnumerator Aim()

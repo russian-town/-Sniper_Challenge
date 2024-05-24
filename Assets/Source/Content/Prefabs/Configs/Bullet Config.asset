@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b23f54efc9ac0c4493398dacefb1550, type: 3}
-  m_Name: Input Config
+  m_Script: {fileID: 11500000, guid: 56116e51c5fbf274588e9bca81b78806, type: 3}
+  m_Name: Bullet Config
   m_EditorClassIdentifier: 
-  <MinTitleAngle>k__BackingField: -30
-  <MaxTitleAngle>k__BackingField: 30
-  <MinLookAngle>k__BackingField: 60
-  <MaxLookAngle>k__BackingField: 210
-  <TurnSmooth>k__BackingField: 0.1
+  <Damage>k__BackingField: 10

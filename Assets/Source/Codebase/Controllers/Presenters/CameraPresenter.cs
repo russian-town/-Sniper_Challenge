@@ -48,7 +48,7 @@ namespace Source.Root
             _titleAngle -= _smoothY * _data.SensitivityOfTitleAngle;
             _titleAngle = Mathf.Clamp(_titleAngle, _config.MinTitleAngle, _config.MaxTitleAngle);
             Vector3 offSet = Quaternion.AngleAxis(_lookAngle, Vector3.up) * Vector3.one;
-            _transform.position = _cameraView.TargetPosition + offSet + _cameraView.OffSet;
+            _transform.position = _cameraView.TargetPosition + offSet;
             _transform.LookAt(_cameraView.TargetPosition);
             _cameraView.SetRotation(_titleAngle);
         }
