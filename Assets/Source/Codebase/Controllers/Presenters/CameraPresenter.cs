@@ -18,7 +18,11 @@ namespace Source.Root
         private float _lookAngle;
         private float _titleAngle;
 
-        public CameraPresenter(CameraView view, IInput input, InputConfig inputConfig, InputData inputData)
+        public CameraPresenter(
+            CameraView view,
+            IInput input,
+            InputConfig inputConfig,
+            InputData inputData)
         {
             _cameraView = view;
             _camera = Camera.main;

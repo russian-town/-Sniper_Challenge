@@ -14,6 +14,9 @@ namespace Source.Root
 
         private void Update()
         {
+            if(Input.GetMouseButtonDown(0))
+                ShootButtonDown?.Invoke();
+
             if (Input.GetMouseButtonDown(1))
                 AimButtonDown?.Invoke();
 

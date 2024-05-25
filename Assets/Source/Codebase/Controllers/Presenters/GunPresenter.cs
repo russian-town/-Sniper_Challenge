@@ -2,9 +2,9 @@ namespace Source.Root
 {
     public class GunPresenter : IPresenter
     {
-        private IInput _input;
-        private GunView _view;
-        private GameLoopService _gameLoopService;
+        private readonly IInput _input;
+        private readonly GunView _view;
+        private readonly GameLoopService _gameLoopService;
 
         public GunPresenter(IInput input, GunView view, GameLoopService gameLoopService)
         {

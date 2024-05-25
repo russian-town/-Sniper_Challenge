@@ -5,12 +5,15 @@ namespace Source.Root
 {
     public class SniperView : ViewBase
     {
-        public const string AimParameter = "Aim";
-        public const string SpeedMultiplierParameter = "SpeedMultiplier";
+        private const string AimParameter = "Aim";
+        private const string SpeedMultiplierParameter = "SpeedMultiplier";
+        private const string ShootParameter = "Shoot";
 
         [SerializeField] private Animator _animator;
         [SerializeField] private AnimationClip _aimEnterClip;
         [SerializeField] private AnimationClip _aimExitClip;
+        [SerializeField] private AnimationClip _shootClip;
+        [SerializeField] private Transform _transform;
 
         public float EnterToAim()
         {
@@ -24,9 +27,10 @@ namespace Source.Root
             return _aimExitClip.length / _animator.GetFloat(SpeedMultiplierParameter);
         }
 
-        internal void Shoot()
+        public float Shoot()
         {
-            throw new NotImplementedException();
+            _animator.SetTrigger(ShootParameter);
+            return _shootClip.length;
         }
     }
 }

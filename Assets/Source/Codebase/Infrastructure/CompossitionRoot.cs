@@ -11,12 +11,19 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private ScopeView _scopeView;
     [SerializeField] private SniperView _sniperView;
     [SerializeField] private CameraView _cameraView;
+    [SerializeField] private BulletView _bulletViewTemplate;
+    [SerializeField] private GunView _gunView;
+
+    [SerializeField] private BulletViewFactory _bulletViewFactory;
 
     private void Awake()
     {
+        BulletViewFactory bulletViewFactory = new(_bulletViewTemplate);
+        GameLoopService gameLoopService = new(bulletViewFactory);
         CameraPresenter cameraPresenter = new(_cameraView, _desktopInput, _inputConfig, _inputData);
         _cameraView.Construct(cameraPresenter);
-        GameLoopService gameLoopService = new();
+        GunPresenter gunPresenter = new(_desktopInput, _gunView, gameLoopService);
+        _gunView.Construct(gunPresenter);
         Scope scope = new();
         ScopePresenter scopePresenter = new(scope, _scopeView, gameLoopService, _coroutineRunner);
         _scopeView.Construct(scopePresenter);
