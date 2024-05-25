@@ -18,9 +18,9 @@ public class CompossitionRoot : MonoBehaviour
 
     private void Awake()
     {
-        BulletViewFactory bulletViewFactory = new(_bulletViewTemplate);
+        BulletViewFactory bulletViewFactory = new(_bulletViewTemplate, _coroutineRunner);
         GameLoopService gameLoopService = new(bulletViewFactory);
-        CameraPresenter cameraPresenter = new(_cameraView, _desktopInput, _inputConfig, _inputData);
+        CameraPresenter cameraPresenter = new(_cameraView, _desktopInput, _inputConfig, _inputData, gameLoopService);
         _cameraView.Construct(cameraPresenter);
         GunPresenter gunPresenter = new(_desktopInput, _gunView, gameLoopService);
         _gunView.Construct(gunPresenter);

@@ -10,6 +10,7 @@ namespace Source.Root
         private readonly Camera _camera;
         private readonly CameraView _cameraView;
         private readonly Transform _transform;
+        private readonly GameLoopService _gameLoopService;
 
         private float _currentXVelocity;
         private float _currentYVelocity;
@@ -22,7 +23,8 @@ namespace Source.Root
             CameraView view,
             IInput input,
             InputConfig inputConfig,
-            InputData inputData)
+            InputData inputData,
+            GameLoopService gameLoopService)
         {
             _cameraView = view;
             _camera = Camera.main;
@@ -30,6 +32,7 @@ namespace Source.Root
             _input = input;
             _config = inputConfig;
             _data = inputData;
+            _gameLoopService = gameLoopService;
         }
 
         public void Enable()
@@ -55,6 +58,7 @@ namespace Source.Root
             _transform.position = _cameraView.TargetPosition + offSet;
             _transform.LookAt(_cameraView.TargetPosition);
             _cameraView.SetRotation(_titleAngle);
+            _gameLoopService.CallCameraEvent(_transform.eulerAngles.y);
         }
     }
 }

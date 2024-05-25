@@ -13,6 +13,7 @@ namespace Source.Root
         private readonly GameLoopService _gameLoopService;
         private readonly Camera _camera;
         private readonly ICoroutineRunner _coroutineRunner;
+        private readonly float _speed = 2f;
 
         private Coroutine _zoomCamera;
 
@@ -40,30 +41,30 @@ namespace Source.Root
         private void OnAimEnter(float animationLenht)
         {
             _scopeView.Show();
+            StartZoom(animationLenht, ScopeFildOfView);
+        }
 
+        private void OnAimExit(float animationLenht)
+        {
+            _scopeView.Hide();
+            StartZoom(animationLenht, DefaultFildOfView);
+        }
+
+        private void StartZoom(float animationLenht, float targetFildOfView)
+        {
             if (_zoomCamera != null)
                 _coroutineRunner.StopCoroutine(_zoomCamera);
 
             _zoomCamera =
-                _coroutineRunner.StartCoroutine(ZoomCamera(animationLenht));
+                _coroutineRunner.StartCoroutine(ZoomCamera(animationLenht, targetFildOfView));
         }
 
-        private void OnAimExit()
+        private IEnumerator ZoomCamera(float animationLenht, float targetFildOfView)
         {
-            _scopeView.Hide();
-
-            if (_zoomCamera != null)
-                _coroutineRunner.StopCoroutine(_zoomCamera);
-
-            _camera.fieldOfView = DefaultFildOfView;
-        }
-
-        private IEnumerator ZoomCamera(float animationLenht)
-        {
-            while(!Mathf.Approximately(_camera.fieldOfView, ScopeFildOfView))
+            while(!Mathf.Approximately(_camera.fieldOfView, targetFildOfView))
             {
                 _camera.fieldOfView =
-                    Mathf.Lerp(_camera.fieldOfView, ScopeFildOfView,  animationLenht);
+                    Mathf.MoveTowards(_camera.fieldOfView, targetFildOfView,  animationLenht);
                 yield return null;
             }
 

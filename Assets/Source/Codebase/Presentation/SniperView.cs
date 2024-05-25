@@ -7,13 +7,17 @@ namespace Source.Root
     {
         private const string AimParameter = "Aim";
         private const string SpeedMultiplierParameter = "SpeedMultiplier";
-        private const string ShootParameter = "Shoot";
 
         [SerializeField] private Animator _animator;
         [SerializeField] private AnimationClip _aimEnterClip;
         [SerializeField] private AnimationClip _aimExitClip;
-        [SerializeField] private AnimationClip _shootClip;
         [SerializeField] private Transform _transform;
+        [SerializeField] private Transform _target;
+
+        private float _startRotation;
+
+        public void Initialize()
+            => _startRotation = _transform.eulerAngles.y;
 
         public float EnterToAim()
         {
@@ -27,10 +31,11 @@ namespace Source.Root
             return _aimExitClip.length / _animator.GetFloat(SpeedMultiplierParameter);
         }
 
-        public float Shoot()
+        public void UpdateRotation(float angle)
         {
-            _animator.SetTrigger(ShootParameter);
-            return _shootClip.length;
+            Vector3 euler = _transform.eulerAngles;
+            euler.y = angle + _startRotation;
+            _transform.eulerAngles = euler;
         }
     }
 }

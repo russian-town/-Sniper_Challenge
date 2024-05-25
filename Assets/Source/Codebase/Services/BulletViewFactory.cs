@@ -3,19 +3,20 @@ using UnityEngine;
 
 public class BulletViewFactory
 {
-    private BulletView _template;
+    private readonly BulletView _template;
+    private readonly ICoroutineRunner _coroutineRunner;
 
-    public BulletViewFactory(BulletView template)
+    public BulletViewFactory(BulletView template, ICoroutineRunner coroutineRunner)
     {
         _template = template;
+        _coroutineRunner = coroutineRunner;
     }
 
-    public BulletView Create(Transform point)
+    public void Create(Transform point)
     {
-        Bullet bullet = new();
+        Bullet bullet = new(point.position);
         BulletView view = Object.Instantiate(_template, point.position, point.rotation);
-        BulletPresenter bulletPresenter = new(bullet, view);
+        BulletPresenter bulletPresenter = new(bullet, view, _coroutineRunner);
         view.Construct(bulletPresenter);
-        return view;
     }
 }
