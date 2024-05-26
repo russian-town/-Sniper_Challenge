@@ -17,6 +17,7 @@ public class CompossitionRoot : MonoBehaviour
     [Header("Presentations")]
     [SerializeField] private ScopeView _scopeView;
     [SerializeField] private SniperView _sniperView;
+    [SerializeField] private CriminalView _criminalView;
     [SerializeField] private CameraView _cameraView;
     [SerializeField] private BulletView _bulletViewTemplate;
     [SerializeField] private GunView _gunView;
@@ -39,8 +40,11 @@ public class CompossitionRoot : MonoBehaviour
         Scope scope = new();
         ScopePresenter scopePresenter = new(scope, _scopeView, gameLoopService);
         _scopeView.Construct(scopePresenter);
-        Sniper sniper = new(40f);
+        Sniper sniper = new();
         SniperPresenter sniperPresenter = new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService);
         _sniperView.Construct(sniperPresenter);
+        Criminal criminal = new(10f);
+        CriminalPresenter criminalPresenter = new(criminal, _criminalView);
+        _criminalView.Construct(criminalPresenter);
     }
 }

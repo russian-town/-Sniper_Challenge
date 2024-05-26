@@ -29,7 +29,12 @@ namespace Source.Root
             Ray ray = new(_camera.transform.position, _camera.transform.forward);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity))
+            {
+                if (hitInfo.transform.TryGetComponent(out CriminalView criminal))
+                    Debug.Log("Poop");
+
                 return hitInfo.point;
+            }
 
             return _gunEnd.forward * _config.Range + _gunEnd.position;
         }

@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Source.Root
 {
     public class CriminalPresenter : IPresenter
     {
-        private Criminal _criminal;
-        private CriminalView _view;
+        private readonly Criminal _criminal;
+        private readonly CriminalView _view;
 
         public CriminalPresenter(Criminal criminal, CriminalView view)
         {
@@ -17,10 +15,22 @@ namespace Source.Root
 
         public void Enable()
         {
+            _criminal.Died += OnDied;
+            _criminal.DamageRecived += OnDamageRecived;
+            _view.Damage += _criminal.TakeDamage;
         }
 
         public void Disable()
         {
+            _criminal.Died -= OnDied;
+            _criminal.DamageRecived -= OnDamageRecived;
+            _view.Damage -= _criminal.TakeDamage;
         }
+
+        private void OnDied(Vector3 point)
+            => _view.PlayDiedAnimation(point);
+
+        private void OnDamageRecived(float damage, Vector3 point)
+            => _view.PlayHitAnimation(damage, point);
     }
 }
