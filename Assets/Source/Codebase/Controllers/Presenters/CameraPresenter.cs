@@ -5,12 +5,13 @@ namespace Source.Root
     public class CameraPresenter : IPresenter
     {
         private readonly IInput _input;
-        private readonly InputConfig _config;
+        private readonly CameraConfig _config;
         private readonly InputData _data;
         private readonly Camera _camera;
-        private readonly CameraView _cameraView;
+        private readonly CameraView _view;
         private readonly Transform _transform;
         private readonly GameLoopService _gameLoopService;
+        private readonly StaticDataService _staticDataService;
 
         private float _currentXVelocity;
         private float _currentYVelocity;
@@ -22,27 +23,38 @@ namespace Source.Root
         public CameraPresenter(
             CameraView view,
             IInput input,
-            InputConfig inputConfig,
+            CameraConfig cameraConfig,
             InputData inputData,
-            GameLoopService gameLoopService)
+            GameLoopService gameLoopService,
+            StaticDataService staticDataService)
         {
-            _cameraView = view;
+            _view = view;
             _camera = Camera.main;
             _transform = _camera.transform.parent;
             _input = input;
-            _config = inputConfig;
+            _config = cameraConfig;
             _data = inputData;
             _gameLoopService = gameLoopService;
+            _staticDataService = staticDataService;
         }
 
         public void Enable()
-        => _input.AxisMoved += OnAxisMoved;
+        {
+            _input.AxisMoved += OnAxisMoved;
+            _gameLoopService.Shot += OnShot;
+        }
 
         public void Disable()
-        => _input.AxisMoved -= OnAxisMoved;
+        {
+            _input.AxisMoved -= OnAxisMoved;
+            _gameLoopService.Shot -= OnShot;
+        } 
 
         private void OnAxisMoved(float horizontal, float vertical)
             => RotateCamera(horizontal, vertical);
+
+        private void OnShot()
+            => _view.PlayRecoil(_staticDataService.RecoilForce);
 
         private void RotateCamera(float horizontal, float vertical)
         {
@@ -55,9 +67,9 @@ namespace Source.Root
             _titleAngle -= _smoothY * _data.SensitivityOfTitleAngle;
             _titleAngle = Mathf.Clamp(_titleAngle, _config.MinTitleAngle, _config.MaxTitleAngle);
             Vector3 offSet = Quaternion.AngleAxis(_lookAngle, Vector3.up) * Vector3.one;
-            _transform.position = _cameraView.TargetPosition + offSet;
-            _transform.LookAt(_cameraView.TargetPosition);
-            _cameraView.SetRotation(_titleAngle);
+            _transform.position = _view.TargetPosition + offSet;
+            _transform.LookAt(_view.TargetPosition);
+            _view.SetRotation(_titleAngle);
             _gameLoopService.CallCameraEvent(_transform.eulerAngles.y);
         }
     }

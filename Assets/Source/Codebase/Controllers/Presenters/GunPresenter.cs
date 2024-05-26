@@ -25,6 +25,7 @@ namespace Source.Root
 
         private void OnShootButtonDown()
         {
+            _view.Shoot();
             _gameLoopService.Shoot(_view.GunEnd);
         }
     }
