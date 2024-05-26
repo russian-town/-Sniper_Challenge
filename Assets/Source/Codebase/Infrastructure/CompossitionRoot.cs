@@ -11,7 +11,7 @@ public class CompossitionRoot : MonoBehaviour
 
     [Header("Configs")]
     [SerializeField] private CameraConfig _cameraConfig;
-    [SerializeField] private RifleConfig[] _rifleConfigs;
+    [SerializeField] private GunConfig[] _gunConfigs;
     [SerializeField] private InputData _inputData;
 
     [Header("Presentations")]
@@ -28,16 +28,18 @@ public class CompossitionRoot : MonoBehaviour
     {
         BulletViewFactory bulletViewFactory = new(_bulletViewTemplate, _coroutineRunner);
         GameLoopService gameLoopService = new(bulletViewFactory);
-        StaticDataService staticDataService = new(_rifleConfigs);
+        StaticDataService staticDataService = new(_gunConfigs);
         CameraPresenter cameraPresenter =
             new(_cameraView, _desktopInput, _cameraConfig, _inputData, gameLoopService, staticDataService);
         _cameraView.Construct(cameraPresenter);
-        GunPresenter gunPresenter = new(_desktopInput, _gunView, gameLoopService);
+        Gun gun = new();
+        GunPresenter gunPresenter =
+            new(_desktopInput, gun, _gunView, gameLoopService, _gunConfigs[0]);
         _gunView.Construct(gunPresenter);
         Scope scope = new();
         ScopePresenter scopePresenter = new(scope, _scopeView, gameLoopService);
         _scopeView.Construct(scopePresenter);
-        Sniper sniper = new();
+        Sniper sniper = new(40f);
         SniperPresenter sniperPresenter = new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService);
         _sniperView.Construct(sniperPresenter);
     }

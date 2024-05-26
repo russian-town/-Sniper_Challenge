@@ -8,9 +8,7 @@ namespace Source.Root
         private readonly BulletViewFactory _bulletViewFactory;
 
         public GameLoopService(BulletViewFactory bulletViewFactory)
-        {
-            _bulletViewFactory = bulletViewFactory;
-        }
+            => _bulletViewFactory = bulletViewFactory;
 
         public event Action<float> AimEnter;
         public event Action<float> AimExit;
@@ -23,9 +21,9 @@ namespace Source.Root
         public void ExitOfAim(float animationLenht)
             => AimExit?.Invoke(animationLenht);
 
-        public void Shoot(Transform gunEnd)
+        public void Shoot(Transform gunEnd, Vector3 direction)
         {
-            _bulletViewFactory.Create(gunEnd);
+            _bulletViewFactory.Create(gunEnd, direction);
             Shot?.Invoke();
         }
 

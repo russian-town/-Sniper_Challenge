@@ -12,9 +12,9 @@ public class BulletViewFactory
         _coroutineRunner = coroutineRunner;
     }
 
-    public void Create(Transform point)
+    public void Create(Transform point, Vector3 direction)
     {
-        Bullet bullet = new(point.position);
+        Bullet bullet = new(point.position, direction);
         BulletView view = Object.Instantiate(_template, point.position, point.rotation);
         BulletPresenter bulletPresenter = new(bullet, view, _coroutineRunner);
         view.Construct(bulletPresenter);

@@ -26,14 +26,12 @@ namespace Source.Root
         public void Enable()
         {
             _input.AimButtonDown += OnAimButtonDown;
-            _gameLoopService.Shot += OnShot;
             _gameLoopService.CameraRotationChanged += OnCameraRotationChanged;
         }
 
         public void Disable()
         {
             _input.AimButtonDown -= OnAimButtonDown;
-            _gameLoopService.Shot -= OnShot;
             _gameLoopService.CameraRotationChanged -= OnCameraRotationChanged;
         }
 
@@ -43,11 +41,6 @@ namespace Source.Root
                 return;
 
             _aim = _coroutineRunner.StartCoroutine(Aim());
-        }
-
-        private void OnShot()
-        {
-            _sniper.Shoot();
         }
 
         private void OnCameraRotationChanged(float angle)

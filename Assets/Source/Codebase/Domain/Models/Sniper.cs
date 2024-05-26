@@ -2,6 +2,10 @@ namespace Source.Root
 {
     public class Sniper : Character
     {
+        public Sniper(float health) : base(health)
+        {
+        }
+
         public bool InAim { get; private set; }
 
         public void EnterToAim()
@@ -9,10 +13,5 @@ namespace Source.Root
 
         public void ExitOfAim()
             => InAim = false;
-
-        public void Shoot()
-        {
-
-        }
     }
 }

@@ -7,7 +7,6 @@ namespace Source.Root
     {
         private readonly Bullet _bullet;
         private readonly BulletView _view;
-        private readonly Camera _camera;
         private readonly ICoroutineRunner _coroutineRunner;
 
         private Coroutine _move;
@@ -16,7 +15,6 @@ namespace Source.Root
         {
             _bullet = bullet;
             _view = view;
-            _camera = Camera.main;
             _coroutineRunner = coroutineRunner;
         }
 
@@ -28,29 +26,14 @@ namespace Source.Root
                 _coroutineRunner.StopCoroutine(_move);
 
             _move =
-                _coroutineRunner.StartCoroutine(Move(CalculatePosition()));
+                _coroutineRunner.StartCoroutine(Move(_bullet.Direction));
         }
 
         public void Disable()
-        {
-            _bullet.PositionChanged -= OnPositionChanged;
-        }
+            => _bullet.PositionChanged -= OnPositionChanged;
 
         private void OnPositionChanged(Vector3 position)
             => _view.SetPosition(position);
-
-        private Vector3 CalculatePosition()
-        {
-            Ray ray = new(_camera.transform.position, _camera.transform.forward);
-
-            if(Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity))
-                return hitInfo.point;
-
-            Vector3 targetPosition
-                = _view.transform.forward * _bullet.MaxDistance + _bullet.StartPosition;
-
-            return targetPosition;
-        }
 
         private IEnumerator Move(Vector3 targetPosition)
         {

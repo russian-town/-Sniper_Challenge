@@ -1,18 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CriminalView : MonoBehaviour
+namespace Source.Root
 {
-    // Start is called before the first frame update
-    void Start()
+    public class CriminalView : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private Animator _animator;
+        [SerializeField] private Rigidbody[] _bodyParts;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void Initialize()
+            => TougleRagdoll(false);
+
+        public void Die()
+        {
+            TougleRagdoll(true);
+        }
+
+        public void TougleRagdoll(bool enable)
+        {
+            foreach (var rigidbody in _bodyParts)
+            {
+                rigidbody.isKinematic = !enable;
+            }
+        }
     }
 }
