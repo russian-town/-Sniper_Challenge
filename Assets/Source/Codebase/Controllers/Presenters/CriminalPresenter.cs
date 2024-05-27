@@ -15,22 +15,25 @@ namespace Source.Root
 
         public void Enable()
         {
+            _view.DamageRecived += OnDamageRecived;
             _criminal.Died += OnDied;
-            _criminal.DamageRecived += OnDamageRecived;
-            _view.Damage += _criminal.TakeDamage;
+            _criminal.DamageProcessed += OnDamageProcessed;
         }
 
         public void Disable()
         {
+            _view.DamageRecived -= OnDamageRecived;
             _criminal.Died -= OnDied;
-            _criminal.DamageRecived -= OnDamageRecived;
-            _view.Damage -= _criminal.TakeDamage;
+            _criminal.DamageProcessed -= OnDamageProcessed;
         }
+
+        private void OnDamageRecived(float damage, Vector3 point)
+            => _criminal.TakeDamage(damage, point);
 
         private void OnDied(Vector3 point)
             => _view.PlayDiedAnimation(point);
 
-        private void OnDamageRecived(float damage, Vector3 point)
+        private void OnDamageProcessed(float damage, Vector3 point)
             => _view.PlayHitAnimation(damage, point);
     }
 }

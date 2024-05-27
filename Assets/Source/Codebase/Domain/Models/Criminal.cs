@@ -11,7 +11,7 @@ namespace Source.Root
             => _health = new(health);
 
         public event Action<Vector3> Died;
-        public event Action<float, Vector3> DamageRecived;
+        public event Action<float, Vector3> DamageProcessed;
 
         public void TakeDamage(float damage, Vector3 point)
         {
@@ -23,7 +23,7 @@ namespace Source.Root
                 return;
             }
 
-            DamageRecived?.Invoke(damage, point);
+            DamageProcessed?.Invoke(damage, point);
         }
     }
 }

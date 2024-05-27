@@ -30,8 +30,8 @@ namespace Source.Root
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity))
             {
-                if (hitInfo.transform.TryGetComponent(out CriminalView criminal))
-                    Debug.Log("Poop");
+                if (hitInfo.transform.TryGetComponent(out IDamageable damageable))
+                    damageable.TakeDamage(_config.Damage, hitInfo.point);
 
                 return hitInfo.point;
             }
