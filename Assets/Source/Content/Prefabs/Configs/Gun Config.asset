@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Damage>k__BackingField: 1
   <RecoilForce>k__BackingField: 3
-  <Range>k__BackingField: 10
+  <Range>k__BackingField: 100
   <ReloadingSpeed>k__BackingField: 0
   <BulletCountInMagazine>k__BackingField: 4
   <AccuracyFromHip>k__BackingField: 0

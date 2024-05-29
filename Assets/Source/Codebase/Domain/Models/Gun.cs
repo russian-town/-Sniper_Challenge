@@ -10,7 +10,7 @@ namespace Source.Root
         private GunConfig _config;
         private Transform _gunEnd;
 
-        public event Action<Vector3> Shot;
+        public event Action<RaycastHit[]> Shot;
 
         public Gun()
             => _camera = Camera.main;
@@ -22,21 +22,11 @@ namespace Source.Root
             => _config = config;
 
         public void Shoot()
-            => Shot?.Invoke(CalculatePosition());
-
-        private Vector3 CalculatePosition()
         {
             Ray ray = new(_camera.transform.position, _camera.transform.forward);
-
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity))
-            {
-                if (hitInfo.transform.TryGetComponent(out IDamageable damageable))
-                    damageable.TakeDamage(_config.Damage, hitInfo.point);
-
-                return hitInfo.point;
-            }
-
-            return _gunEnd.forward * _config.Range + _gunEnd.position;
+            RaycastHit[] raycastHit = Physics.RaycastAll(ray, _config.Range);
+            Shot?.Invoke(raycastHit);
+            Vector3 direction = ray.direction * _config.Range + _gunEnd.position;
         }
     }
 }

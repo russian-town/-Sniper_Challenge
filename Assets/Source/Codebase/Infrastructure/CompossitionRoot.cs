@@ -13,6 +13,7 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private CameraConfig _cameraConfig;
     [SerializeField] private GunConfig[] _gunConfigs;
     [SerializeField] private InputData _inputData;
+    [SerializeField] private BulletConfig _bulletConfig;
 
     [Header("Presentations")]
     [SerializeField] private ScopeView _scopeView;
@@ -27,7 +28,8 @@ public class CompossitionRoot : MonoBehaviour
 
     private void Awake()
     {
-        BulletViewFactory bulletViewFactory = new(_bulletViewTemplate, _coroutineRunner);
+        BulletViewFactory bulletViewFactory =
+            new(_bulletViewTemplate, _coroutineRunner, _bulletConfig);
         GameLoopService gameLoopService = new(bulletViewFactory);
         StaticDataService staticDataService = new(_gunConfigs);
         CameraPresenter cameraPresenter =

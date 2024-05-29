@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Source.Root
@@ -37,7 +38,7 @@ namespace Source.Root
             _gun.Shoot();
         }
 
-        private void OnShot(Vector3 direction)
-            => _gameLoopService.Shoot(_view.GunEnd, direction);
+        private void OnShot(RaycastHit[] raycastHits)
+            => _gameLoopService.Shoot(_view.GunEnd, raycastHits);
     }
 }

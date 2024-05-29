@@ -8,25 +8,22 @@ namespace Source.Root
         private readonly Bullet _bullet;
         private readonly BulletView _view;
         private readonly ICoroutineRunner _coroutineRunner;
+        private readonly RaycastHit[] _raycastHits;
 
         private Coroutine _move;
 
-        public BulletPresenter(Bullet bullet, BulletView view, ICoroutineRunner coroutineRunner)
+        public BulletPresenter(Bullet bullet, BulletView view, ICoroutineRunner coroutineRunner, RaycastHit[] raycastHits)
         {
             _bullet = bullet;
             _view = view;
             _coroutineRunner = coroutineRunner;
+            _raycastHits = raycastHits;
         }
 
         public void Enable()
         {
             _bullet.PositionChanged += OnPositionChanged;
-
-            if (_move != null)
-                _coroutineRunner.StopCoroutine(_move);
-
-            _move =
-                _coroutineRunner.StartCoroutine(Move(_bullet.Direction));
+            StartMove();
         }
 
         public void Disable()
@@ -35,17 +32,34 @@ namespace Source.Root
         private void OnPositionChanged(Vector3 position)
             => _view.SetPosition(position);
 
-        private IEnumerator Move(Vector3 targetPosition)
+        private void StartMove()
         {
-            _view.SetDirection(targetPosition);
+            if (_move != null)
+                _coroutineRunner.StopCoroutine(_move);
 
-            while (Vector3.Distance(_bullet.CurrentPosition, targetPosition) > 0f)
+            _move =
+                _coroutineRunner.StartCoroutine(Move(_raycastHits));
+        }
+
+        private IEnumerator Move(RaycastHit[] raycastHits)
+        {
+            if(raycastHits.Length == 0)
+                yield break;
+
+            foreach (RaycastHit hit in raycastHits)
             {
-                float step = Time.deltaTime * _bullet.FlightSpeed;
-                Vector3 newPosition =
-                    Vector3.MoveTowards(_bullet.CurrentPosition, targetPosition, step);
-                _bullet.ChangePosition(newPosition);
-                yield return null;
+                _view.SetDirection(hit.point);
+
+                while (Vector3.Distance(_bullet.CurrentPosition, hit.point) > 0f)
+                {
+                    float step = Time.deltaTime * _bullet.FlightSpeed;
+                    Vector3 newPosition =
+                        Vector3.MoveTowards(_bullet.CurrentPosition, hit.point, step);
+                    _bullet.ChangePosition(newPosition);
+                    yield return null;
+                }
+
+                _bullet.Attack(hit);
             }
 
             _view.Destroy();

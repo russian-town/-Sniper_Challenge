@@ -5,21 +5,28 @@ namespace Source.Root
 {
     public class Bullet
     {
+        private readonly BulletConfig _config;
+
         private Vector3 _position;
 
-        public Bullet(Vector3 position, Vector3 direction)
+        public Bullet(Vector3 position, BulletConfig config)
         {
             _position = position;
+            _config = config;
             StartPosition = position;
-            Direction = direction;
         }
 
-        public Vector3 Direction { get; private set; }
-        public float FlightSpeed { get; private set; } = 20f;
         public Vector3 StartPosition { get; private set; }
         public Vector3 CurrentPosition => _position;
+        public float FlightSpeed => _config.FlightSpeed;
 
         public event Action<Vector3> PositionChanged;
+
+        public void Attack(RaycastHit hit)
+        {
+            if (hit.transform.TryGetComponent(out IDamageable damageable))
+                damageable.TakeDamage(_config.Damage, hit.point);
+        }
 
         public void ChangePosition(Vector3 position)
         {

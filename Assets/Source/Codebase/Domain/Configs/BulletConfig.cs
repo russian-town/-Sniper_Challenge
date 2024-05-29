@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿ using UnityEngine;
 
 namespace Source.Root
 {
@@ -6,5 +6,6 @@ namespace Source.Root
     public class BulletConfig : ScriptableObject
     {
         [field: SerializeField] public float Damage {  get; private set; }
+        [field: SerializeField] public float FlightSpeed { get; private set; }
     }
 }

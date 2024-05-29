@@ -21,9 +21,9 @@ namespace Source.Root
         public void ExitOfAim(float animationLenht)
             => AimExit?.Invoke(animationLenht);
 
-        public void Shoot(Transform gunEnd, Vector3 direction)
+        public void Shoot(Transform point, RaycastHit[] raycastHits)
         {
-            _bulletViewFactory.Create(gunEnd, direction);
+            _bulletViewFactory.Create(point, raycastHits);
             Shot?.Invoke();
         }
 
