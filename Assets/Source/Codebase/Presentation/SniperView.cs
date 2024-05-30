@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Source.Root
 {
-    public class SniperView : ViewBase
+    public class SniperView : ViewBase, IDamageable
     {
         private const string AimParameter = "Aim";
         private const string SpeedMultiplierParameter = "SpeedMultiplier";
@@ -15,6 +15,8 @@ namespace Source.Root
         [SerializeField] private Transform _target;
 
         private float _startRotation;
+
+        public event Action<float, Vector3> DamageRecived;
 
         public void Initialize()
             => _startRotation = _transform.eulerAngles.y;
@@ -37,5 +39,8 @@ namespace Source.Root
             euler.y = angle + _startRotation;
             _transform.eulerAngles = euler;
         }
+
+        public void TakeDamage(float damage, Vector3 point)
+            => DamageRecived?.Invoke(damage, point);
     }
 }

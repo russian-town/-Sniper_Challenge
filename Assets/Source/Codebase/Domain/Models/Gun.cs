@@ -3,30 +3,31 @@ using UnityEngine;
 
 namespace Source.Root
 {
-    public class Gun
+    public class Gun : IGun
     {
-        private readonly Camera _camera;
-
+        private RaycastHit[] _raycastHits;
         private GunConfig _config;
-        private Transform _gunEnd;
+        private Transform _endPoint;
 
-        public event Action<RaycastHit[]> Shot;
+        public Transform EndPoint => _endPoint;
 
-        public Gun()
-            => _camera = Camera.main;
+        public event Action Shot;
 
         public void SetGunEnd(Transform gunEnd)
-            => _gunEnd = gunEnd;
+            => _endPoint = gunEnd;
 
         public void SetConfig(GunConfig config)
             => _config = config;
 
-        public void Shoot()
+        public void ApplyTrajectori(Ray ray)
         {
-            Ray ray = new(_camera.transform.position, _camera.transform.forward);
-            RaycastHit[] raycastHit = Physics.RaycastAll(ray, _config.Range);
-            Shot?.Invoke(raycastHit);
-            Vector3 direction = ray.direction * _config.Range + _gunEnd.position;
+            _raycastHits = Physics.RaycastAll(ray, _config.Range);
+        }
+
+        public void TakeBullet(IBullet bullet)
+        {
+            bullet.Fly(_raycastHits);
+            Shot?.Invoke();
         }
     }
 }

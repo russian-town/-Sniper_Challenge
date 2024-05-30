@@ -5,15 +5,11 @@ namespace Source.Root
 {
     public class GameLoopService
     {
-        private readonly BulletViewFactory _bulletViewFactory;
-
-        public GameLoopService(BulletViewFactory bulletViewFactory)
-            => _bulletViewFactory = bulletViewFactory;
-
         public event Action<float> AimEnter;
         public event Action<float> AimExit;
         public event Action Shot;
         public event Action<float> CameraRotationChanged;
+        public event Action<Transform> PlayerDetected;
 
         public void EnterToAim(float animationLenht)
             => AimEnter?.Invoke(animationLenht);
@@ -21,10 +17,10 @@ namespace Source.Root
         public void ExitOfAim(float animationLenht)
             => AimExit?.Invoke(animationLenht);
 
-        public void Shoot(Transform point, RaycastHit[] raycastHits)
+        public void SniperShoot(Transform point)
         {
-            _bulletViewFactory.Create(point, raycastHits);
             Shot?.Invoke();
+            PlayerDetected?.Invoke(point);
         }
 
         public void CallCameraEvent(float angle)

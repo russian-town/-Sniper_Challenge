@@ -21,32 +21,35 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private CriminalView _criminalView;
     [SerializeField] private CameraView _cameraView;
     [SerializeField] private BulletView _bulletViewTemplate;
-    [SerializeField] private GunView _gunView;
-
-    [Header("Factories")]
-    [SerializeField] private BulletViewFactory _bulletViewFactory;
+    [SerializeField] private GunView _rifleView;
+    [SerializeField] private GunView _pistolView;
 
     private void Awake()
     {
-        BulletViewFactory bulletViewFactory =
-            new(_bulletViewTemplate, _coroutineRunner, _bulletConfig);
-        GameLoopService gameLoopService = new(bulletViewFactory);
+        ShooterService shooterService = new(_coroutineRunner, _bulletViewTemplate, _bulletConfig);
+        GameLoopService gameLoopService = new();
         StaticDataService staticDataService = new(_gunConfigs);
         CameraPresenter cameraPresenter =
             new(_cameraView, _desktopInput, _cameraConfig, _inputData, gameLoopService, staticDataService);
         _cameraView.Construct(cameraPresenter);
-        Gun gun = new();
-        GunPresenter gunPresenter =
-            new(_desktopInput, gun, _gunView, gameLoopService, _gunConfigs[0]);
-        _gunView.Construct(gunPresenter);
+        Gun rifle = new();
+        GunPresenter riflePresenter = new(rifle, _rifleView, _gunConfigs[0]);
+        _rifleView.Construct(riflePresenter);
         Scope scope = new();
         ScopePresenter scopePresenter = new(scope, _scopeView, gameLoopService);
         _scopeView.Construct(scopePresenter);
-        Sniper sniper = new();
-        SniperPresenter sniperPresenter = new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService);
+        Sniper sniper = new(40f);
+        SniperPresenter sniperPresenter =
+            new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService, shooterService);
         _sniperView.Construct(sniperPresenter);
         Criminal criminal = new(10f);
-        CriminalPresenter criminalPresenter = new(criminal, _criminalView);
+        CriminalPresenter criminalPresenter =
+            new(criminal, _criminalView, gameLoopService, shooterService);
         _criminalView.Construct(criminalPresenter);
+        Gun pistol = new();
+        GunPresenter pistolPresenter = new(pistol, _pistolView, _gunConfigs[0]);
+        _pistolView.Construct(pistolPresenter);
+        shooterService.RegistyWeapon(sniper, rifle);
+        shooterService.RegistyWeapon(criminal, pistol);
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Source.Root
 {
-    public class Bullet
+    public class Bullet : IBullet
     {
         private readonly BulletConfig _config;
 
@@ -21,6 +21,7 @@ namespace Source.Root
         public float FlightSpeed => _config.FlightSpeed;
 
         public event Action<Vector3> PositionChanged;
+        public event Action<RaycastHit[]> FlewOut;
 
         public void Attack(RaycastHit hit)
         {
@@ -32,6 +33,11 @@ namespace Source.Root
         {
             _position = position;
             PositionChanged?.Invoke(_position);
+        }
+
+        public void Fly(RaycastHit[] raycastHits)
+        {
+            FlewOut?.Invoke(raycastHits);
         }
     }
 }

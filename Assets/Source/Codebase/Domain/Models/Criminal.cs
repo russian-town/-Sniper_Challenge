@@ -1,29 +1,23 @@
-using System;
 using UnityEngine;
 
 namespace Source.Root
 {
-    public class Criminal : Character, IDamageable
+    public class Criminal : Character
     {
-        private readonly Health _health;
+        private Transform _target;
+        private Vector3 _position;
 
-        public Criminal(float health)
-            => _health = new(health);
-
-        public event Action<Vector3> Died;
-        public event Action<float, Vector3> DamageProcessed;
-
-        public void TakeDamage(float damage, Vector3 point)
+        public Criminal(float health) : base(health)
         {
-            _health.TakeDamage(damage, point);
-
-            if (_health.Value <= 0)
-            {
-                Died?.Invoke(point);
-                return;
-            }
-
-            DamageProcessed?.Invoke(damage, point);
         }
+
+        public void SetTarget(Transform target)
+            => _target = target;
+
+        public void SetStartPosition(Vector3 position)
+            => _position = position;
+
+        public override Ray Ray()
+            => new(_position, _target.position);
     }
 }

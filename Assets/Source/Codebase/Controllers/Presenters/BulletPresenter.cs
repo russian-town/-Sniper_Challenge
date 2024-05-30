@@ -8,42 +8,43 @@ namespace Source.Root
         private readonly Bullet _bullet;
         private readonly BulletView _view;
         private readonly ICoroutineRunner _coroutineRunner;
-        private readonly RaycastHit[] _raycastHits;
 
-        private Coroutine _move;
+        private Coroutine _fly;
 
-        public BulletPresenter(Bullet bullet, BulletView view, ICoroutineRunner coroutineRunner, RaycastHit[] raycastHits)
+        public BulletPresenter(Bullet bullet, BulletView view, ICoroutineRunner coroutineRunner)
         {
             _bullet = bullet;
             _view = view;
             _coroutineRunner = coroutineRunner;
-            _raycastHits = raycastHits;
         }
 
         public void Enable()
         {
             _bullet.PositionChanged += OnPositionChanged;
-            StartMove();
+            _bullet.FlewOut += OnFlewOut;
         }
 
         public void Disable()
-            => _bullet.PositionChanged -= OnPositionChanged;
+        {
+            _bullet.PositionChanged -= OnPositionChanged;
+            _bullet.FlewOut -= OnFlewOut;
+        }
 
         private void OnPositionChanged(Vector3 position)
             => _view.SetPosition(position);
 
-        private void StartMove()
+        private void OnFlewOut(RaycastHit[] raycastHits)
         {
-            if (_move != null)
-                _coroutineRunner.StopCoroutine(_move);
+            if (_fly != null)
+                _coroutineRunner.StopCoroutine(_fly);
 
-            _move =
-                _coroutineRunner.StartCoroutine(Move(_raycastHits));
+            _fly =
+                _coroutineRunner.StartCoroutine(Fly(raycastHits));
         }
 
-        private IEnumerator Move(RaycastHit[] raycastHits)
+        private IEnumerator Fly(RaycastHit[] raycastHits)
         {
-            if(raycastHits.Length == 0)
+            if(raycastHits.Length  == 0)
                 yield break;
 
             foreach (RaycastHit hit in raycastHits)
@@ -63,7 +64,7 @@ namespace Source.Root
             }
 
             _view.Destroy();
-            _move = null;
+            _fly = null;
         }
     }
 }
