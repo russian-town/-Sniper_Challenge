@@ -52,7 +52,7 @@ public class CompossitionRoot : MonoBehaviour
         _healthBarView.Construct(healthBarPresenter);
         Criminal criminal = new(10f);
         CriminalPresenter criminalPresenter =
-            new(criminal, _criminalView, gameLoopService, shooterService);
+            new(criminal, _criminalView, gameLoopService, shooterService, _coroutineRunner);
         _criminalView.Construct(criminalPresenter);
         Gun pistol = new();
         GunPresenter pistolPresenter = new(pistol, _pistolView, _gunConfigs[0]);

@@ -1,10 +1,14 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Source.Root
 {
     public class CriminalView : ViewBase, IDamageable
     {
+        private const string FindParameter = "Find";
+        private const string ShootParameter = "Shoot";
+
         [SerializeField] private Animator _animator;
         [SerializeField] private Rigidbody[] _bodyParts;
         [SerializeField] private Rigidbody _body;
@@ -13,6 +17,8 @@ namespace Source.Root
         [SerializeField] private Transform _target;
 
         public event Action<float, Vector3> DamageRecived;
+        public event Action PlayerFinded;
+        public event Action Shot;
 
         public void PlayHitAnimation(float damage, Vector3 point)
             => _body.AddForceAtPosition(Vector3.one * damage * 100f, point);
@@ -28,7 +34,19 @@ namespace Source.Root
         public void TakeDamage(float damage, Vector3 point)
             => DamageRecived(damage, point);
 
+        public void FindSniper()
+            => _animator.SetBool(FindParameter, true);
+
+        public void Shoot()
+            => _animator.SetTrigger(ShootParameter);
+
         public void LookAtSniper(Transform sniper)
-            => _transform.LookAt(sniper.position);
+        {
+            _animator.SetBool(FindParameter, false);
+            _transform.LookAt(sniper.position);
+        }
+
+        public void CallShotEvent()
+            => Shot?.Invoke();
     }
 }
