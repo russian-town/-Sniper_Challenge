@@ -4,6 +4,6 @@ namespace Source.Root
 {
     public interface IBullet
     {
-        public void Attack(RaycastHit result);
+        public void SetResult(RaycastHit result);
     }
 }

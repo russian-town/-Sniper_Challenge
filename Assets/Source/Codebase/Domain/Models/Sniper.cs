@@ -33,11 +33,9 @@ namespace Source.Root
                 return ray.origin + ray.direction * DefaultHitDistance;
 
             foreach (var result in results)
-            {
-                bullet.Attack(result);
-            }
+                bullet.SetResult(result);
 
-            return gun.EndPoint.position + (results[^1].point - gun.EndPoint.position);
+            return gun.EndPoint.position + (results[0].point - gun.EndPoint.position);
         }
     }
 }

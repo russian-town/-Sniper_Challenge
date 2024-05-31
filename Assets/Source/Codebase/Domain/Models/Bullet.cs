@@ -26,18 +26,29 @@ namespace Source.Root
         public event Action<Vector3> PositionChanged;
         public event Action<Vector3> FlewOut;
 
-        public void Attack(RaycastHit result)
+        public void SetResult(RaycastHit result)
             => _results.Push(result);
 
         public void ChangePosition(Vector3 position)
         {
             _position = position;
             PositionChanged?.Invoke(_position);
+        }
 
+        public bool GoalAchieved(Vector3 target)
+        {
+            float distance = (target - _position).sqrMagnitude;
+            return Mathf.Approximately(Mathf.Sqrt(distance), 0f);
+        }
+
+        public void UpdateResults()
+        {
             if (_results.Count == 0)
                 return;
 
-            if (Vector3.Distance(_position, _results.Peek().point) <= 0)
+            float distance = (_results.Peek().point - _position).sqrMagnitude;
+
+            if (Mathf.Sqrt(distance) < 0.5f)
             {
                 RaycastHit raycastHit = _results.Pop();
 

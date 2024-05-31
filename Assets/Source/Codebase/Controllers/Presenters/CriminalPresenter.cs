@@ -45,7 +45,7 @@ namespace Source.Root
             _view.LookAtSniper(transform);
             _criminal.SetTarget(transform);
             _shooterService.CreateBullet(_criminal);
-        } 
+        }
 
         private void OnDied(Vector3 point)
             => _view.PlayDiedAnimation(point);

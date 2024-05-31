@@ -18,7 +18,7 @@ namespace Source.Root
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, gun.Range))
             {
-                bullet.Attack(hitInfo);
+                bullet.SetResult(hitInfo);
                 return gun.EndPoint.position + (hitInfo.point - gun.EndPoint.position);
             }
             else

@@ -46,11 +46,12 @@ namespace Source.Root
             Vector3 target;
             _view.SetDirection(point);
 
-            while (Vector3.Distance(_bullet.CurrentPosition, point) > 0)
+            while (_bullet.GoalAchieved(point) == false)
             {
                 float step = Time.deltaTime * _bullet.FlightSpeed;
                 target = Vector3.MoveTowards(_bullet.CurrentPosition, point, step);
                 _bullet.ChangePosition(target);
+                _bullet.UpdateResults();
                 yield return null;
             }
 
