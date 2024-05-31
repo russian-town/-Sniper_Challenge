@@ -6,7 +6,9 @@ namespace Source.Root
     public class Health : IDamageable
     {
         public Health(float value)
-            => Value = value;
+        {
+            Value = value;
+        }
 
         public float Value { get; private set; }
 
@@ -14,6 +16,8 @@ namespace Source.Root
         {
             if (damage <= 0)
                 throw new ArgumentException("Damage cannot be negative or zero");
+
+            Value -= damage;
 
             if (Value <= 0)
                 Value = 0;

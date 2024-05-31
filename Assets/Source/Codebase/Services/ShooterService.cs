@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Source.Root
 {
-    public class ShooterService : IShooterService
+    public class ShooterService
     {
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly BulletView _bulletViewTemplate;

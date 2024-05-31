@@ -1,9 +1,8 @@
-using System;
 using UnityEngine;
 
 namespace Source.Root
 {
-    public class Sniper : Character, IDamageable
+    public class Sniper : Character
     {
         private const float DefaultHitDistance = 10f;
 
@@ -15,8 +14,6 @@ namespace Source.Root
         }
 
         public bool InAim { get; private set; }
-
-        public event Action<RaycastHit[]> TargetsHit;
 
         public void EnterToAim()
             => InAim = true;

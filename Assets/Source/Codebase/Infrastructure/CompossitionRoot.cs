@@ -23,12 +23,17 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private BulletView _bulletViewTemplate;
     [SerializeField] private GunView _rifleView;
     [SerializeField] private GunView _pistolView;
+    [SerializeField] private HealthBarView _healthBarView;
+
+    [SerializeField] private CanvasGroup _bloodOverlay;
 
     private void Awake()
     {
         ShooterService shooterService = new(_coroutineRunner, _bulletViewTemplate, _bulletConfig);
         GameLoopService gameLoopService = new();
         StaticDataService staticDataService = new(_gunConfigs);
+        HudUpdateService hudUpdateService = new();
+        hudUpdateService.SetBloodOverlayImage(_bloodOverlay);
         CameraPresenter cameraPresenter =
             new(_cameraView, _desktopInput, _cameraConfig, _inputData, gameLoopService, staticDataService);
         _cameraView.Construct(cameraPresenter);
@@ -40,8 +45,11 @@ public class CompossitionRoot : MonoBehaviour
         _scopeView.Construct(scopePresenter);
         Sniper sniper = new(40f);
         SniperPresenter sniperPresenter =
-            new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService, shooterService);
+            new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService, shooterService, hudUpdateService);
         _sniperView.Construct(sniperPresenter);
+        HealthBar healthBar = new HealthBar(sniper.StartHealth);
+        HealthBarPresenter healthBarPresenter = new HealthBarPresenter(hudUpdateService, healthBar, _healthBarView);
+        _healthBarView.Construct(healthBarPresenter);
         Criminal criminal = new(10f);
         CriminalPresenter criminalPresenter =
             new(criminal, _criminalView, gameLoopService, shooterService);
