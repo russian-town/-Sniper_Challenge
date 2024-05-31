@@ -29,7 +29,6 @@ namespace Source.Root
             _input.AimButtonDown += OnAimButtonDown;
             _input.ShootButtonDown += OnShootButtonDown;
             _gameLoopService.CameraRotationChanged += OnCameraRotationChanged;
-            _sniper.TrajectoryDetermined += OnTrajectoryDetermined;
         }
 
         public void Disable()
@@ -37,7 +36,6 @@ namespace Source.Root
             _input.AimButtonDown -= OnAimButtonDown;
             _input.ShootButtonDown -= OnShootButtonDown;
             _gameLoopService.CameraRotationChanged -= OnCameraRotationChanged;
-            _sniper.TrajectoryDetermined -= OnTrajectoryDetermined;
         }
 
         private void OnAimButtonDown()
@@ -49,16 +47,13 @@ namespace Source.Root
         }
 
         private void OnShootButtonDown()
-            => _sniper.CalculateTrajectory();
+        {
+            _shooterService.CreateBullet(_sniper);
+            _gameLoopService.SniperShoot(_view.TargetOfCriminal);
+        }
 
         private void OnCameraRotationChanged(float angle)
             => _view.UpdateRotation(angle);
-
-        private void OnTrajectoryDetermined(Ray ray)
-        {
-            _shooterService.CreateBullet(_sniper, ray);
-            _gameLoopService.SniperShoot(_view.transform);
-        }
 
         private IEnumerator Aim()
         {

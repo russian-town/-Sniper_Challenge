@@ -33,38 +33,29 @@ namespace Source.Root
         private void OnPositionChanged(Vector3 position)
             => _view.SetPosition(position);
 
-        private void OnFlewOut(RaycastHit[] raycastHits)
+        private void OnFlewOut(Vector3 point)
         {
             if (_fly != null)
                 _coroutineRunner.StopCoroutine(_fly);
 
-            _fly =
-                _coroutineRunner.StartCoroutine(Fly(raycastHits));
+            _fly = _coroutineRunner.StartCoroutine(Fly(point));
         }
 
-        private IEnumerator Fly(RaycastHit[] raycastHits)
+        private IEnumerator Fly(Vector3 point)
         {
-            if(raycastHits.Length  == 0)
-                yield break;
+            Vector3 target;
+            _view.SetDirection(point);
 
-            foreach (RaycastHit hit in raycastHits)
+            while (Vector3.Distance(_bullet.CurrentPosition, point) > 0)
             {
-                _view.SetDirection(hit.point);
-
-                while (Vector3.Distance(_bullet.CurrentPosition, hit.point) > 0f)
-                {
-                    float step = Time.deltaTime * _bullet.FlightSpeed;
-                    Vector3 newPosition =
-                        Vector3.MoveTowards(_bullet.CurrentPosition, hit.point, step);
-                    _bullet.ChangePosition(newPosition);
-                    yield return null;
-                }
-
-                _bullet.Attack(hit);
+                float step = Time.deltaTime * _bullet.FlightSpeed;
+                target = Vector3.MoveTowards(_bullet.CurrentPosition, point, step);
+                _bullet.ChangePosition(target);
+                yield return null;
             }
 
-            _view.Destroy();
             _fly = null;
+            _view.Destroy();
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Source.Root
 
         public event Action<Vector3> Died;
         public event Action<float, Vector3> DamageProcessed;
-        public event Action<Ray> TrajectoryDetermined;
 
         public void TakeDamage(float damage, Vector3 point)
         {
@@ -27,9 +26,6 @@ namespace Source.Root
             DamageProcessed?.Invoke(damage, point);
         }
 
-        public void CalculateTrajectory()
-            => TrajectoryDetermined?.Invoke(Ray());
-
-        public abstract Ray Ray();
+        public abstract Vector3 CalculateTrajectory(IGun gun, IBullet bullet);
     }
 }

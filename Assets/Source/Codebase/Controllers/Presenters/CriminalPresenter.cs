@@ -19,7 +19,6 @@ namespace Source.Root
             _view = view;
             _gameLoopService = gameLoopService;
             _shooterService = shooterService;
-            _criminal.SetStartPosition(_view.transform.position);
         }
 
         public void Enable()
@@ -28,7 +27,6 @@ namespace Source.Root
             _criminal.Died += OnDied;
             _criminal.DamageProcessed += OnDamageProcessed;
             _gameLoopService.PlayerDetected += OnPlayerDetected;
-            _criminal.TrajectoryDetermined += OnTrajectoryDetermined;
         }
 
         public void Disable()
@@ -37,7 +35,6 @@ namespace Source.Root
             _criminal.Died -= OnDied;
             _criminal.DamageProcessed -= OnDamageProcessed;
             _gameLoopService.PlayerDetected -= OnPlayerDetected;
-            _criminal.TrajectoryDetermined -= OnTrajectoryDetermined;
         }
 
         private void OnDamageRecived(float damage, Vector3 point)
@@ -45,8 +42,9 @@ namespace Source.Root
 
         private void OnPlayerDetected(Transform transform)
         {
+            _view.LookAtSniper(transform);
             _criminal.SetTarget(transform);
-            _criminal.CalculateTrajectory();
+            _shooterService.CreateBullet(_criminal);
         } 
 
         private void OnDied(Vector3 point)
@@ -54,8 +52,5 @@ namespace Source.Root
 
         private void OnDamageProcessed(float damage, Vector3 point)
             => _view.PlayHitAnimation(damage, point);
-
-        private void OnTrajectoryDetermined(Ray ray)
-            => _shooterService.CreateBullet(_criminal, ray);
     }
 }

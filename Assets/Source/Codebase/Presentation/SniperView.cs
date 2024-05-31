@@ -12,9 +12,10 @@ namespace Source.Root
         [SerializeField] private AnimationClip _aimEnterClip;
         [SerializeField] private AnimationClip _aimExitClip;
         [SerializeField] private Transform _transform;
-        [SerializeField] private Transform _target;
 
         private float _startRotation;
+
+        [field: SerializeField] public Transform TargetOfCriminal { get; private set; }
 
         public event Action<float, Vector3> DamageRecived;
 

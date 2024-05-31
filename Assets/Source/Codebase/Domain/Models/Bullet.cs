@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Source.Root
@@ -6,6 +7,7 @@ namespace Source.Root
     public class Bullet : IBullet
     {
         private readonly BulletConfig _config;
+        private readonly Stack<RaycastHit> _results;
 
         private Vector3 _position;
 
@@ -13,6 +15,7 @@ namespace Source.Root
         {
             _position = position;
             _config = config;
+            _results = new();
             StartPosition = position;
         }
 
@@ -21,23 +24,29 @@ namespace Source.Root
         public float FlightSpeed => _config.FlightSpeed;
 
         public event Action<Vector3> PositionChanged;
-        public event Action<RaycastHit[]> FlewOut;
+        public event Action<Vector3> FlewOut;
 
-        public void Attack(RaycastHit hit)
-        {
-            if (hit.transform.TryGetComponent(out IDamageable damageable))
-                damageable.TakeDamage(_config.Damage, hit.point);
-        }
+        public void Attack(RaycastHit result)
+            => _results.Push(result);
 
         public void ChangePosition(Vector3 position)
         {
             _position = position;
             PositionChanged?.Invoke(_position);
+
+            if (_results.Count == 0)
+                return;
+
+            if (Vector3.Distance(_position, _results.Peek().point) <= 0)
+            {
+                RaycastHit raycastHit = _results.Pop();
+
+                if (raycastHit.transform.TryGetComponent(out IDamageable damageable))
+                    damageable.TakeDamage(_config.Damage, raycastHit.point);
+            }
         }
 
-        public void Fly(RaycastHit[] raycastHits)
-        {
-            FlewOut?.Invoke(raycastHits);
-        }
+        public void StartFlight(Vector3 point)
+            => FlewOut?.Invoke(point);
     }
 }

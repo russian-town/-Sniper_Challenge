@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Source.Root
 {
-    public class ShooterService
+    public class ShooterService : IShooterService
     {
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly BulletView _bulletViewTemplate;
@@ -26,17 +26,16 @@ namespace Source.Root
         public void RegistyWeapon(Character character, IGun gun)
             => _findGunOfCharacter.Add(character, gun);
 
-        public void CreateBullet(Character character, Ray ray)
+        public void CreateBullet(Character character)
         {
-            Debug.Log(character.GetType());
             IGun gun = _findGunOfCharacter[character] ?? throw new Exception("Weapon unregistry");
             Bullet bullet = new(gun.EndPoint.position, _bulletConfig);
             BulletView bulletView =
                 Object.Instantiate(_bulletViewTemplate, gun.EndPoint.position, Quaternion.identity);
             BulletPresenter bulletPresenter = new(bullet, bulletView, _coroutineRunner);
             bulletView.Construct(bulletPresenter);
-            gun.ApplyTrajectori(ray);
-            gun.TakeBullet(bullet);
+            Vector3 trajectory = character.CalculateTrajectory(gun, bullet);
+            bullet.StartFlight(trajectory);
         }
     }
 }

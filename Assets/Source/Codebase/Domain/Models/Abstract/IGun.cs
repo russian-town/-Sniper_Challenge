@@ -1,9 +1,10 @@
-using Source.Root;
 using UnityEngine;
 
-public interface IGun
+namespace Source.Root
 {
-    public Transform EndPoint {  get; }
-    public void ApplyTrajectori(Ray ray);
-    public void TakeBullet(IBullet bullet);
+    public interface IGun
+    {
+        public Transform EndPoint { get; }
+        public float Range { get; }
+    }
 }

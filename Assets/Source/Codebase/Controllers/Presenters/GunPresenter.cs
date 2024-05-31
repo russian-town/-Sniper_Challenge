@@ -10,7 +10,7 @@ namespace Source.Root
             _view = view;
             _gun = gun;
             _gun.SetConfig(config);
-            _gun.SetGunEnd(_view.GunEnd);
+            _gun.SetEndPoint(_view.GunEnd);
         }
 
         public void Enable()

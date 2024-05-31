@@ -8,6 +8,9 @@ namespace Source.Root
         [SerializeField] private Animator _animator;
         [SerializeField] private Rigidbody[] _bodyParts;
         [SerializeField] private Rigidbody _body;
+        [SerializeField] private Transform _transform;
+        [SerializeField] private Transform _gunEnd;
+        [SerializeField] private Transform _target;
 
         public event Action<float, Vector3> DamageRecived;
 
@@ -24,5 +27,8 @@ namespace Source.Root
 
         public void TakeDamage(float damage, Vector3 point)
             => DamageRecived(damage, point);
+
+        public void LookAtSniper(Transform sniper)
+            => _transform.LookAt(sniper.position);
     }
 }
