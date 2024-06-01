@@ -13,11 +13,8 @@ namespace Source.Root
         [SerializeField] private Collider[] _bodyParts;
         [SerializeField] private Transform _transform;
         [SerializeField] private Transform _gunEnd;
-        [SerializeField] private Transform _target;
-        [SerializeField] private TMP_Text _worldDamageText;
 
         public event Action<float, Vector3> DamageRecived;
-        public event Action PlayerFinded;
         public event Action Shot;
 
         public void PlayHitAnimation(float damage, Vector3 point)

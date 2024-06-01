@@ -1,9 +1,10 @@
-using System.Collections;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Source.Root
 {
-    public class CriminalPresenter : IPresenter
+    public class CriminalPresenter : IPresenter, IStateMachine
     {
         private readonly Criminal _criminal;
         private readonly CriminalView _view;
@@ -11,16 +12,17 @@ namespace Source.Root
         private readonly ShooterService _shooterService;
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly HudUpdateService _hudUpdateService;
+        private readonly Dictionary<Type, State> _states;
 
-        private Coroutine _find;
-        private Coroutine _shoot;
-        private bool _playerIsFinded;
+        private State _activeState;
+        private bool _sniperDetected;
+        private Transform _sniper;
 
         public CriminalPresenter(
             Criminal criminal,
             CriminalView view,
             GameLoopService gameLoopService,
-            ShooterService shooterService, 
+            ShooterService shooterService,
             ICoroutineRunner coroutineRunner,
             HudUpdateService hudUpdateService)
         {
@@ -30,14 +32,29 @@ namespace Source.Root
             _shooterService = shooterService;
             _coroutineRunner = coroutineRunner;
             _hudUpdateService = hudUpdateService;
+            State idleState = new IdleState(this);
+            State detectingState = new DetectingState(this, view, _sniper);
+            State lookingState = new LookingState(this, view);
+            State shootingState = new ShootingState(this, view);
+            _states = new Dictionary<Type, State>
+            {
+                { idleState.GetType(), idleState },
+                { detectingState.GetType(), detectingState },
+                { lookingState.GetType(), lookingState },
+                { shootingState.GetType(), shootingState }
+            };
+            Enter<IdleState>();
         }
+
+        public event Action SniperDetected;
 
         public void Enable()
         {
             _view.DamageRecived += OnDamageRecived;
             _criminal.Died += OnDied;
             _criminal.DamageProcessed += OnDamageProcessed;
-            _gameLoopService.PlayerDetected += OnPlayerDetected;
+            _gameLoopService.SniperShot += OnSniperShot;
+            _gameLoopService.SniperDied += OnSniperDied;
             _view.Shot += OnShot;
         }
 
@@ -46,47 +63,35 @@ namespace Source.Root
             _view.DamageRecived -= OnDamageRecived;
             _criminal.Died -= OnDied;
             _criminal.DamageProcessed -= OnDamageProcessed;
-            _gameLoopService.PlayerDetected -= OnPlayerDetected;
+            _gameLoopService.SniperShot -= OnSniperShot;
+            _gameLoopService.SniperDied -= OnSniperDied;
+            _activeState?.Exit();
+        }
+
+        public void Enter<T>() where T : State
+        {
+            _activeState?.Exit();
+            State state = _states[typeof(T)];
+            _activeState = state;
+            state.Enter();
         }
 
         private void OnDamageRecived(float damage, Vector3 point)
             => _criminal.TakeDamage(damage, point);
 
-        private void OnPlayerDetected(Transform sniper)
+        private void OnSniperShot(Transform sniper)
         {
-            if(_playerIsFinded)
+            if (_sniperDetected)
                 return;
 
-            _view.FindSniper();
+            _sniper = sniper;
             _criminal.SetTarget(sniper);
-
-            if(_find != null)
-                _coroutineRunner.StopCoroutine(_find);
-
-            _find = _coroutineRunner.StartCoroutine(Find(sniper));
+            SniperDetected?.Invoke();
+            _sniperDetected = true;
         }
 
-        private IEnumerator Find(Transform sniper)
-        {
-            yield return new WaitForSeconds(2f);
-            _playerIsFinded = true;
-            _view.LookAtSniper(sniper);
-
-            if (_shoot != null)
-                _coroutineRunner.StopCoroutine(_shoot);
-
-            _shoot = _coroutineRunner.StartCoroutine(Shoot(sniper));
-            _find = null;
-        }
-
-        private IEnumerator Shoot(Transform sniper)
-        {
-            while(sniper != null)
-            {
-                _view.Shoot();
-                yield return new WaitForSeconds(2f);
-            }
-        }
+        private void OnSniperDied()
+            => Enter<IdleState>();
 
         private void OnShot()
             => _shooterService.CreateBullet(_criminal);

@@ -9,7 +9,8 @@ namespace Source.Root
         public event Action<float> AimExit;
         public event Action Shot;
         public event Action<float> CameraRotationChanged;
-        public event Action<Transform> PlayerDetected;
+        public event Action<Transform> SniperShot;
+        public event Action SniperDied;
 
         public void EnterToAim(float animationLenht)
             => AimEnter?.Invoke(animationLenht);
@@ -20,7 +21,7 @@ namespace Source.Root
         public void SniperShoot(Transform point)
         {
             Shot?.Invoke();
-            PlayerDetected?.Invoke(point);
+            SniperShot?.Invoke(point);
         }
 
         public void CallCameraEvent(float angle)
