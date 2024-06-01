@@ -21,7 +21,7 @@ namespace Source.Root
 
         public void TakeDamage(float damage, Vector3 point)
         {
-            _health.TakeDamage(damage, point);
+            _health.ProcessCalculatedDamage(damage, point);
             HealthChanged?.Invoke(_health.Value);
 
             if (_health.Value <= 0)

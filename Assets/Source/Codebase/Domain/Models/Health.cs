@@ -12,7 +12,7 @@ namespace Source.Root
 
         public float Value { get; private set; }
 
-        public void TakeDamage(float damage, Vector3 point)
+        public void ProcessCalculatedDamage(float damage, Vector3 point)
         {
             if (damage <= 0)
                 throw new ArgumentException("Damage cannot be negative or zero");

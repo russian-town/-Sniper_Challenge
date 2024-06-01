@@ -53,7 +53,7 @@ namespace Source.Root
                 RaycastHit raycastHit = _results.Pop();
 
                 if (raycastHit.transform.TryGetComponent(out IDamageable damageable))
-                    damageable.TakeDamage(_config.Damage, raycastHit.point);
+                    damageable.ProcessCalculatedDamage(_config.Damage, raycastHit.point);
             }
         }
 

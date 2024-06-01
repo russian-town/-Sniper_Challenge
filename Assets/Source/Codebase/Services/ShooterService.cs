@@ -26,6 +26,9 @@ namespace Source.Root
         public void RegistyWeapon(Character character, IGun gun)
             => _findGunOfCharacter.Add(character, gun);
 
+        public void UnregistryWeapon(Character character)
+            => _findGunOfCharacter.Remove(character);
+
         public void CreateBullet(Character character)
         {
             IGun gun = _findGunOfCharacter[character] ?? throw new Exception("Weapon unregistry");

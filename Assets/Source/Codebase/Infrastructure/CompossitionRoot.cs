@@ -25,7 +25,9 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private GunView _pistolView;
     [SerializeField] private HealthBarView _healthBarView;
 
+    [Header("UI")]
     [SerializeField] private CanvasGroup _bloodOverlay;
+    [SerializeField] private CanvasGroup _skull;
 
     private void Awake()
     {
@@ -34,6 +36,7 @@ public class CompossitionRoot : MonoBehaviour
         StaticDataService staticDataService = new(_gunConfigs);
         HudUpdateService hudUpdateService = new();
         hudUpdateService.SetBloodOverlayImage(_bloodOverlay);
+        hudUpdateService.SetSkullImage(_skull);
         CameraPresenter cameraPresenter =
             new(_cameraView, _desktopInput, _cameraConfig, _inputData, gameLoopService, staticDataService);
         _cameraView.Construct(cameraPresenter);
@@ -52,7 +55,7 @@ public class CompossitionRoot : MonoBehaviour
         _healthBarView.Construct(healthBarPresenter);
         Criminal criminal = new(10f);
         CriminalPresenter criminalPresenter =
-            new(criminal, _criminalView, gameLoopService, shooterService, _coroutineRunner);
+            new(criminal, _criminalView, gameLoopService, shooterService, _coroutineRunner, hudUpdateService);
         _criminalView.Construct(criminalPresenter);
         Gun pistol = new();
         GunPresenter pistolPresenter = new(pistol, _pistolView, _gunConfigs[0]);

@@ -41,7 +41,7 @@ namespace Source.Root
             _transform.eulerAngles = euler;
         }
 
-        public void TakeDamage(float damage, Vector3 point)
+        public void ProcessCalculatedDamage(float damage, Vector3 point)
             => DamageRecived?.Invoke(damage, point);
     }
 }
