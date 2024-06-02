@@ -1,4 +1,6 @@
-using DG.Tweening;
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Source.Root
 {
@@ -6,7 +8,7 @@ namespace Source.Root
     {
         private readonly CriminalView _view;
 
-        private Sequence _sequence;
+        private CancellationTokenSource _cancellationToken;
 
         public ShootingState(IStateMachine stateMachine, CriminalView view)
             : base(stateMachine)
@@ -14,15 +16,18 @@ namespace Source.Root
             _view = view;
         }
 
-        public override void Enter()
+        public async override void Enter()
         {
-            _sequence = DOTween.Sequence();
-            _view.Shoot();
-            _sequence.AppendInterval(2f);
-            _sequence.Play().Loops();
+            _cancellationToken = new();
+
+            while (!_cancellationToken.IsCancellationRequested)
+            {
+                _view.Shoot();
+                await UniTask.Delay(TimeSpan.FromSeconds(2f));
+            }
         }
 
         public override void Exit()
-            => _sequence.Complete();
+            => _cancellationToken.Cancel();
     }
 }

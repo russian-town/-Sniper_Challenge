@@ -10,7 +10,6 @@ namespace Source.Root
         private readonly CriminalView _view;
         private readonly GameLoopService _gameLoopService;
         private readonly ShooterService _shooterService;
-        private readonly ICoroutineRunner _coroutineRunner;
         private readonly HudUpdateService _hudUpdateService;
         private readonly Dictionary<Type, State> _states;
 
@@ -22,14 +21,12 @@ namespace Source.Root
             CriminalView view,
             GameLoopService gameLoopService,
             ShooterService shooterService,
-            ICoroutineRunner coroutineRunner,
             HudUpdateService hudUpdateService)
         {
             _criminal = criminal;
             _view = view;
             _gameLoopService = gameLoopService;
             _shooterService = shooterService;
-            _coroutineRunner = coroutineRunner;
             _hudUpdateService = hudUpdateService;
             State idleState = new IdleState(this);
             State detectingState = new DetectingState(this, view, _sniper);
@@ -82,6 +79,7 @@ namespace Source.Root
         {
             _sniper = sniper;
             _criminal.SetTarget(sniper);
+            _view.SetTarget(sniper);
             SniperDetected?.Invoke();
         }
 
@@ -93,6 +91,7 @@ namespace Source.Root
 
         private void OnDied(Vector3 point)
         {
+            _activeState?.Exit();
             _view.PlayDiedAnimation(point);
             _hudUpdateService.ShowDeath();
             _shooterService.UnregistryWeapon(_criminal);

@@ -1,4 +1,4 @@
-using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Source.Root
@@ -7,15 +7,11 @@ namespace Source.Root
     {
         private readonly Bullet _bullet;
         private readonly BulletView _view;
-        private readonly ICoroutineRunner _coroutineRunner;
 
-        private Coroutine _fly;
-
-        public BulletPresenter(Bullet bullet, BulletView view, ICoroutineRunner coroutineRunner)
+        public BulletPresenter(Bullet bullet, BulletView view)
         {
             _bullet = bullet;
             _view = view;
-            _coroutineRunner = coroutineRunner;
         }
 
         public void Enable()
@@ -33,15 +29,10 @@ namespace Source.Root
         private void OnPositionChanged(Vector3 position)
             => _view.SetPosition(position);
 
-        private void OnFlewOut(Vector3 point)
-        {
-            if (_fly != null)
-                _coroutineRunner.StopCoroutine(_fly);
+        private async void OnFlewOut(Vector3 point)
+            => await Fly(point);
 
-            _fly = _coroutineRunner.StartCoroutine(Fly(point));
-        }
-
-        private IEnumerator Fly(Vector3 point)
+        private async UniTask Fly(Vector3 point)
         {
             Vector3 target;
             _view.SetDirection(point);
@@ -52,10 +43,9 @@ namespace Source.Root
                 target = Vector3.MoveTowards(_bullet.CurrentPosition, point, step);
                 _bullet.ChangePosition(target);
                 _bullet.UpdateResults();
-                yield return null;
+                await UniTask.Yield();
             }
 
-            _fly = null;
             _view.Destroy();
         }
     }

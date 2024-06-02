@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class CompossitionRoot : MonoBehaviour
 {
-    [Header("Services")]
-    [SerializeField] private CoroutineRunner _coroutineRunner;
-
     [Header("Input")]
     [SerializeField] private DesktopInput _desktopInput;
 
@@ -31,7 +28,7 @@ public class CompossitionRoot : MonoBehaviour
 
     private void Awake()
     {
-        ShooterService shooterService = new(_coroutineRunner, _bulletViewTemplate, _bulletConfig);
+        ShooterService shooterService = new(_bulletViewTemplate, _bulletConfig);
         GameLoopService gameLoopService = new();
         StaticDataService staticDataService = new(_gunConfigs);
         HudUpdateService hudUpdateService = new();
@@ -48,14 +45,14 @@ public class CompossitionRoot : MonoBehaviour
         _scopeView.Construct(scopePresenter);
         Sniper sniper = new(40f);
         SniperPresenter sniperPresenter =
-            new(sniper, _sniperView, _desktopInput, _coroutineRunner, gameLoopService, shooterService, hudUpdateService);
+            new(sniper, _sniperView, _desktopInput, gameLoopService, shooterService, hudUpdateService);
         _sniperView.Construct(sniperPresenter);
         HealthBar healthBar = new HealthBar(sniper.StartHealth);
         HealthBarPresenter healthBarPresenter = new HealthBarPresenter(hudUpdateService, healthBar, _healthBarView);
         _healthBarView.Construct(healthBarPresenter);
         Criminal criminal = new(10f);
         CriminalPresenter criminalPresenter =
-            new(criminal, _criminalView, gameLoopService, shooterService, _coroutineRunner, hudUpdateService);
+            new(criminal, _criminalView, gameLoopService, shooterService, hudUpdateService);
         _criminalView.Construct(criminalPresenter);
         Gun pistol = new();
         GunPresenter pistolPresenter = new(pistol, _pistolView, _gunConfigs[0]);

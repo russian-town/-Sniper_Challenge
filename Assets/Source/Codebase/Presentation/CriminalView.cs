@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 
 namespace Source.Root
@@ -13,6 +12,8 @@ namespace Source.Root
         [SerializeField] private Collider[] _bodyParts;
         [SerializeField] private Transform _transform;
         [SerializeField] private Transform _gunEnd;
+
+        private Transform _sniper;
 
         public event Action<float, Vector3> DamageRecived;
         public event Action Shot;
@@ -35,10 +36,13 @@ namespace Source.Root
         public void Shoot()
             => _animator.SetTrigger(ShootParameter);
 
-        public void LookAtSniper(Transform sniper)
+        public void SetTarget(Transform sniper)
+            => _sniper = sniper;
+
+        public void LookAtSniper()
         {
             _animator.SetBool(FindParameter, false);
-            _transform.LookAt(sniper.position);
+            _transform.LookAt(_sniper.position);
         }
 
         public void CallShotEvent()

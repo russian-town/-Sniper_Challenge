@@ -24,6 +24,9 @@ namespace Source.Root
             SniperShot?.Invoke(point);
         }
 
+        public void CallEventOfSniperDied()
+            => SniperDied?.Invoke();
+
         public void CallCameraEvent(float angle)
             => CameraRotationChanged?.Invoke(angle);
     }

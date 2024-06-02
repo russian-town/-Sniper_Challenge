@@ -1,4 +1,5 @@
-using System.Collections;
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Source.Root
@@ -7,18 +8,14 @@ namespace Source.Root
     {
         private readonly Sniper _sniper;
         private readonly SniperView _view;
-        private readonly ICoroutineRunner _coroutineRunner;
         private readonly IInput _input;
         private readonly GameLoopService _gameLoopService;
         private readonly ShooterService _shooterService;
         private readonly HudUpdateService _hudUpdateService;
 
-        private Coroutine _aim;
-
         public SniperPresenter(Sniper sniper,
             SniperView view,
             IInput input,
-            ICoroutineRunner coroutineRunner,
             GameLoopService gameLoopService,
             ShooterService shooterService,
             HudUpdateService hudUpdateService)
@@ -26,7 +23,6 @@ namespace Source.Root
             _sniper = sniper;
             _view = view;
             _input = input;
-            _coroutineRunner = coroutineRunner;
             _gameLoopService = gameLoopService;
             _shooterService = shooterService;
             _view.Initialize();
@@ -40,6 +36,7 @@ namespace Source.Root
             _gameLoopService.CameraRotationChanged += OnCameraRotationChanged;
             _view.DamageRecived += OnDamageRecived;
             _sniper.HealthChanged += OnHealthChanged;
+            _sniper.Died += OnDied;
         }
 
         public void Disable()
@@ -49,15 +46,11 @@ namespace Source.Root
             _gameLoopService.CameraRotationChanged -= OnCameraRotationChanged;
             _view.DamageRecived -= OnDamageRecived;
             _sniper.HealthChanged -= OnHealthChanged;
+            _sniper.Died -= OnDied;
         }
 
-        private void OnAimButtonDown()
-        {
-            if (_aim != null)
-                return;
-
-            _aim = _coroutineRunner.StartCoroutine(Aim());
-        }
+        private async void OnAimButtonDown()
+            => await Aim();
 
         private void OnShootButtonDown()
         {
@@ -74,24 +67,25 @@ namespace Source.Root
         private void OnHealthChanged(float value)
             => _hudUpdateService.UpdateHealthBar(value);
 
-        private IEnumerator Aim()
+        private void OnDied(Vector3 vector)
+            => _gameLoopService.CallEventOfSniperDied();
+
+        private async UniTask Aim()
         {
             if(_sniper.InAim == false)
             {
                 float animationLenht = _view.EnterToAim();
-                _gameLoopService.EnterToAim(animationLenht);
-                yield return new WaitForSeconds(animationLenht);
+                await UniTask.Delay(TimeSpan.FromSeconds(animationLenht));
                 _sniper.EnterToAim();
+                _gameLoopService.EnterToAim(animationLenht);
             }
             else
             {
                 float animationLenht = _view.ExitOfAim();
                 _gameLoopService.ExitOfAim(animationLenht);
-                yield return new WaitForSeconds(animationLenht);
+                await UniTask.Delay(TimeSpan.FromSeconds(animationLenht));
                 _sniper.ExitOfAim();
             }
-
-            _aim = null;
         }
     }
 }

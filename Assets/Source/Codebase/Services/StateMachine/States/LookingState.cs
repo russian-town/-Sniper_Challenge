@@ -1,4 +1,5 @@
-using DG.Tweening;
+using System;
+using Cysharp.Threading.Tasks;
 
 namespace Source.Root
 {
@@ -6,24 +7,19 @@ namespace Source.Root
     {
         private readonly CriminalView _view;
 
-        private Sequence _sequence;
-
         public LookingState(IStateMachine stateMachine, CriminalView view) :
             base(stateMachine)
         {
             _view = view;
         }
 
-        public override void Enter()
+        public async override void Enter()
         {
             _view.FindSniper();
-            _sequence = DOTween.Sequence();
-            _sequence.AppendInterval(1f);
-            _sequence.Complete();
+            await UniTask.Delay(TimeSpan.FromSeconds(2f));
             StateMachine.Enter<DetectingState>();
         }
 
-        public override void Exit()
-            => _sequence.Complete();
+        public override void Exit() { }
     }
 }
