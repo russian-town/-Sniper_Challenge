@@ -15,7 +15,6 @@ namespace Source.Root
         private readonly Dictionary<Type, State> _states;
 
         private State _activeState;
-        private bool _sniperDetected;
         private Transform _sniper;
 
         public CriminalPresenter(
@@ -81,13 +80,9 @@ namespace Source.Root
 
         private void OnSniperShot(Transform sniper)
         {
-            if (_sniperDetected)
-                return;
-
             _sniper = sniper;
             _criminal.SetTarget(sniper);
             SniperDetected?.Invoke();
-            _sniperDetected = true;
         }
 
         private void OnSniperDied()
