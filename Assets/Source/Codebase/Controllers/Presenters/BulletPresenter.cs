@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 
 namespace Source.Root
@@ -36,6 +37,7 @@ namespace Source.Root
         {
             Vector3 target;
             _view.SetDirection(point);
+            CancellationTokenSource cancellationToken = new();
 
             while (_bullet.GoalAchieved(point) == false)
             {
@@ -43,9 +45,10 @@ namespace Source.Root
                 target = Vector3.MoveTowards(_bullet.CurrentPosition, point, step);
                 _bullet.ChangePosition(target);
                 _bullet.UpdateResults();
-                await UniTask.Yield();
+                await UniTask.Yield(cancellationToken.Token);
             }
 
+            cancellationToken.Cancel();
             _view.Destroy();
         }
     }

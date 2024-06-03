@@ -67,7 +67,7 @@ namespace Source.Root
         private void OnHealthChanged(float value)
             => _hudUpdateService.UpdateHealthBar(value);
 
-        private void OnDied(Vector3 vector)
+        private void OnDied()
             => _gameLoopService.CallEventOfSniperDied();
 
         private async UniTask Aim()

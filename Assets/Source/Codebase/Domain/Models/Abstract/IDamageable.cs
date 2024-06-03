@@ -4,6 +4,6 @@ namespace Source.Root
 {
     public interface IDamageable
     {
-        public void ProcessCalculatedDamage(float damage, Vector3 point);
+        public void TakeDamage(float damage, Vector3 point);
     }
 }

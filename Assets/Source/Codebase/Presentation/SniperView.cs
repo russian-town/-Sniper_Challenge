@@ -12,6 +12,7 @@ namespace Source.Root
         [SerializeField] private AnimationClip _aimEnterClip;
         [SerializeField] private AnimationClip _aimExitClip;
         [SerializeField] private Transform _transform;
+        [SerializeField] private Camera _camera;
 
         private float _startRotation;
 
@@ -41,7 +42,7 @@ namespace Source.Root
             _transform.eulerAngles = euler;
         }
 
-        public void ProcessCalculatedDamage(float damage, Vector3 point)
+        public void TakeDamage(float damage, Vector3 point)
             => DamageRecived?.Invoke(damage, point);
     }
 }

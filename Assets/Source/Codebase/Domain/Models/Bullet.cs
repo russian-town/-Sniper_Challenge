@@ -22,6 +22,7 @@ namespace Source.Root
         public Vector3 StartPosition { get; private set; }
         public Vector3 CurrentPosition => _position;
         public float FlightSpeed => _config.FlightSpeed;
+        public float Damage => _config.Damage;
 
         public event Action<Vector3> PositionChanged;
         public event Action<Vector3> FlewOut;
@@ -53,7 +54,7 @@ namespace Source.Root
                 RaycastHit raycastHit = _results.Pop();
 
                 if (raycastHit.transform.TryGetComponent(out IDamageable damageable))
-                    damageable.ProcessCalculatedDamage(_config.Damage, raycastHit.point);
+                    damageable.TakeDamage(_config.Damage, raycastHit.point);
             }
         }
 

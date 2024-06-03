@@ -9,7 +9,7 @@ namespace Source.Root
         private const string ShootParameter = "Shoot";
 
         [SerializeField] private Animator _animator;
-        [SerializeField] private Collider[] _bodyParts;
+        [SerializeField] private BodyPart[] _bodyParts;
         [SerializeField] private Transform _transform;
         [SerializeField] private Transform _gunEnd;
 
@@ -22,7 +22,7 @@ namespace Source.Root
         {
         }
 
-        public void PlayDiedAnimation(Vector3 point)
+        public void PlayDiedAnimation()
         {
             _animator.enabled = false;
         }
@@ -47,5 +47,13 @@ namespace Source.Root
 
         public void CallShotEvent()
             => Shot?.Invoke();
+
+        public void UpdateHealth(float currentHealth)
+        {
+            foreach (var bodyPart in _bodyParts)
+            {
+                bodyPart.SetHealth(currentHealth);
+            }
+        }
     }
 }

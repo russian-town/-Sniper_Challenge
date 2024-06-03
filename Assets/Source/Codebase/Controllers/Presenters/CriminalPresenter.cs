@@ -49,6 +49,7 @@ namespace Source.Root
             _view.DamageRecived += OnDamageRecived;
             _criminal.Died += OnDied;
             _criminal.DamageProcessed += OnDamageProcessed;
+            _criminal.HealthChanged += OnHealthChanged;
             _gameLoopService.SniperShot += OnSniperShot;
             _gameLoopService.SniperDied += OnSniperDied;
             _view.Shot += OnShot;
@@ -57,6 +58,7 @@ namespace Source.Root
         public void Disable()
         {
             _view.DamageRecived -= OnDamageRecived;
+            _criminal.HealthChanged -= OnHealthChanged;
             _criminal.Died -= OnDied;
             _criminal.DamageProcessed -= OnDamageProcessed;
             _gameLoopService.SniperShot -= OnSniperShot;
@@ -75,6 +77,9 @@ namespace Source.Root
         private void OnDamageRecived(float damage, Vector3 point)
             => _criminal.TakeDamage(damage, point);
 
+        private void OnHealthChanged(float currentHealth)
+            => _view.UpdateHealth(currentHealth);
+
         private void OnSniperShot(Transform sniper)
         {
             _sniper = sniper;
@@ -89,10 +94,10 @@ namespace Source.Root
         private void OnShot()
             => _shooterService.CreateBullet(_criminal);
 
-        private void OnDied(Vector3 point)
+        private void OnDied()
         {
             _activeState?.Exit();
-            _view.PlayDiedAnimation(point);
+            _view.PlayDiedAnimation();
             _hudUpdateService.ShowDeath();
             _shooterService.UnregistryWeapon(_criminal);
         }

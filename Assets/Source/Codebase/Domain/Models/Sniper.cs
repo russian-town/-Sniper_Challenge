@@ -1,28 +1,31 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Source.Root
 {
-    public class Sniper : Character
+    public class Sniper : ICharacter, IDamageable
     {
         private const float DefaultHitDistance = 10f;
 
         private readonly Camera _camera;
+        private readonly Health _health;
 
-        public Sniper(float health) : base(health)
+        public Sniper(float health)
         {
             _camera = Camera.main;
+            _health = new(health);
+            StartHealth = health;
         }
 
         public bool InAim { get; private set; }
+        public float StartHealth { get; private set; }
 
+        public event Action<float> HealthChanged;
         public event Action HeadShot;
-        public event Action DoubleKill;
-        public event Action HipShot;
-        public event Action ThroughObstacleKilled;
+        public event Action HipfireShot;
+        public event Action<int> MultiKill;
+        public event Action ThroughCoverHit;
+        public event Action Died;
 
         public void EnterToAim()
             => InAim = true;
@@ -30,7 +33,16 @@ namespace Source.Root
         public void ExitOfAim()
             => InAim = false;
 
-        public override Vector3 CalculateTrajectory(IGun gun, IBullet bullet)
+        public void TakeDamage(float damage, Vector3 point)
+        {
+            _health.TakeDamage(damage, point);
+            HealthChanged?.Invoke(_health.Value);
+
+            if (_health.Value <= 0)
+                Died?.Invoke();
+        }
+
+        public Vector3 CalculateTrajectory(IGun gun, IBullet bullet)
         {
             bool inAim = InAim;
             Ray ray = new(_camera.transform.position, _camera.transform.forward);
@@ -38,6 +50,37 @@ namespace Source.Root
 
             if (results.Length == 0)
                 return ray.origin + ray.direction * DefaultHitDistance;
+
+            int criminalCount = 0;
+
+            for (int i = 0; i < results.Length; i++)
+            {
+                if (results[i].transform.TryGetComponent(out IBodyPart bodyPart))
+                {
+                    if (bodyPart.CheckDead(bullet.Damage))
+                    {
+                        criminalCount++;
+
+                        if (bodyPart.Name == BodyPartName.Head)
+                            HeadShot?.Invoke();
+
+                        if (inAim == false)
+                            HipfireShot?.Invoke();
+
+                        if (i == 0)
+                            continue;
+
+                        RaycastHit previousResult = results[i - 1];
+
+                        if (!previousResult.transform.TryGetComponent(out IDamageable _))
+                            if (results[i].distance > previousResult.distance)
+                                ThroughCoverHit?.Invoke();
+                    }
+                }
+
+                if (criminalCount > 1)
+                    MultiKill?.Invoke(criminalCount);
+            }
 
             foreach (var result in results)
             {

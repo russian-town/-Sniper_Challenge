@@ -6,5 +6,7 @@ namespace Source.Root
     {
         public Transform EndPoint { get; }
         public float Range { get; }
+
+        public void Shoot();
     }
 }

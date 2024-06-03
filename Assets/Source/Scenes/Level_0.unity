@@ -1412,6 +1412,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2455626354779038468, guid: e67e6f28219042c46b7cb588e15f629a, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2455626354783215052, guid: e67e6f28219042c46b7cb588e15f629a, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1551,6 +1555,7 @@ MonoBehaviour:
   _aimEnterClip: {fileID: -203655887218126122, guid: c0653b963ec763f48ae6dba2df9e1d2c, type: 3}
   _aimExitClip: {fileID: -203655887218126122, guid: 728efc9502c2ed64983b816bf911089f, type: 3}
   _transform: {fileID: 1740734742}
+  _camera: {fileID: 9939858}
   <TargetOfCriminal>k__BackingField: {fileID: 89741217}
 --- !u!136 &1740734744
 CapsuleCollider:
@@ -2222,11 +2227,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4586316156867630781, guid: 388b740f7906b1b4ab4bb69f4a0b7cb3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.01
+      value: 9.3
       objectReference: {fileID: 0}
     - target: {fileID: 4586316156867630781, guid: 388b740f7906b1b4ab4bb69f4a0b7cb3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.93
+      value: 5.55
       objectReference: {fileID: 0}
     - target: {fileID: 4586316156867630781, guid: 388b740f7906b1b4ab4bb69f4a0b7cb3, type: 3}
       propertyPath: m_LocalRotation.w

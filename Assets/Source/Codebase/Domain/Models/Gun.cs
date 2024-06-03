@@ -18,5 +18,8 @@ namespace Source.Root
 
         public void SetConfig(GunConfig config)
             => _config = config;
+
+        public void Shoot()
+            => Shot?.Invoke();
     }
 }
