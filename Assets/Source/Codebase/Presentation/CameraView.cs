@@ -10,7 +10,7 @@ namespace Source.Root
         [SerializeField] private Transform _transform;
         [SerializeField] private Transform _target;
 
-        public Vector3 TargetPosition => _target.position;
+        public Transform Target => _target;
 
         public void SetTarget(Transform target)
             => _target = target;

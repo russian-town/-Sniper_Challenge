@@ -66,9 +66,9 @@ namespace Source.Root
             _lookAngle = Mathf.Clamp(_lookAngle, _config.MinLookAngle, _config.MaxLookAngle);
             _titleAngle -= _smoothY * _data.SensitivityOfTitleAngle;
             _titleAngle = Mathf.Clamp(_titleAngle, _config.MinTitleAngle, _config.MaxTitleAngle);
-            Vector3 offSet = Quaternion.AngleAxis(_lookAngle, Vector3.up) * Vector3.one;
-            _transform.position = _view.TargetPosition + offSet;
-            _transform.LookAt(_view.TargetPosition);
+            Vector3 offSet = Quaternion.AngleAxis(_lookAngle + 180f, Vector3.up) * Vector3.one;
+            _transform.position = _view.Target.position + offSet;
+            _transform.LookAt(_view.Target);
             _view.SetRotation(_titleAngle);
             _gameLoopService.CallCameraEvent(_transform.eulerAngles.y);
         }

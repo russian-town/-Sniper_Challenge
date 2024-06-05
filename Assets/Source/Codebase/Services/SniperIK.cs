@@ -17,7 +17,6 @@ namespace Source.Root
             _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, _ikWeight);
             _animator.SetIKPosition(AvatarIKGoal.LeftHand, _leftHandPoint.position);
             _animator.SetIKRotation(AvatarIKGoal.LeftHand, _leftHandPoint.rotation);
-            _animator.SetLookAtWeight(_ikWeight);
         }
     }
 }
