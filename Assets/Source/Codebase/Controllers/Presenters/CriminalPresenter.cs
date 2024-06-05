@@ -98,7 +98,6 @@ namespace Source.Root
         {
             _activeState?.Exit();
             _view.PlayDiedAnimation();
-            _hudUpdateService.ShowDeath();
             _shooterService.UnregistryWeapon(_criminal);
         }
 

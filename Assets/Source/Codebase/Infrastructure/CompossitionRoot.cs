@@ -7,10 +7,7 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private DesktopInput _desktopInput;
 
     [Header("Configs")]
-    [SerializeField] private CameraConfig _cameraConfig;
-    [SerializeField] private GunConfig[] _gunConfigs;
-    [SerializeField] private InputData _inputData;
-    [SerializeField] private BulletConfig _bulletConfig;
+    [SerializeField] private LevelConfigs _levelConfigs;
 
     [Header("Presentations")]
     [SerializeField] private ScopeView _scopeView;
@@ -21,24 +18,30 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private GunView _rifleView;
     [SerializeField] private GunView _pistolView;
     [SerializeField] private HealthBarView _healthBarView;
+    [SerializeField] private AchievementBoardView _achievementBoardView;
 
     [Header("UI")]
     [SerializeField] private CanvasGroup _bloodOverlay;
-    [SerializeField] private CanvasGroup _skull;
 
     private void Awake()
     {
-        ShooterService shooterService = new(_bulletViewTemplate, _bulletConfig);
-        GameLoopService gameLoopService = new();
-        StaticDataService staticDataService = new(_gunConfigs);
+        StaticDataService staticDataService = new();
+        ShooterService shooterService = new(_bulletViewTemplate, _levelConfigs.BulletConfig);
+        AchievementViewFactory achievementViewFactory = new(staticDataService);
+        AchievementService achievementService = new(achievementViewFactory);
+        AchievementsBoard achievementsBoard = new();
+        AchievementBoardPresenter achievementBoardPresenter =
+            new(achievementsBoard, _achievementBoardView);
+        _achievementBoardView.Construct(achievementBoardPresenter);
+        GameLoopService gameLoopService = new(achievementService, achievementsBoard);
         HudUpdateService hudUpdateService = new();
+        staticDataService.LoadConfigs(_levelConfigs);
         hudUpdateService.SetBloodOverlayImage(_bloodOverlay);
-        hudUpdateService.SetSkullImage(_skull);
         CameraPresenter cameraPresenter =
-            new(_cameraView, _desktopInput, _cameraConfig, _inputData, gameLoopService, staticDataService);
+            new(_cameraView, _desktopInput, _levelConfigs.CameraConfig, _levelConfigs.InputData, gameLoopService, staticDataService);
         _cameraView.Construct(cameraPresenter);
         Gun rifle = new();
-        GunPresenter riflePresenter = new(rifle, _rifleView, _gunConfigs[0]);
+        GunPresenter riflePresenter = new(rifle, _rifleView, _levelConfigs.GunConfigs[0]);
         _rifleView.Construct(riflePresenter);
         Scope scope = new();
         ScopePresenter scopePresenter = new(scope, _scopeView, gameLoopService);
@@ -48,14 +51,14 @@ public class CompossitionRoot : MonoBehaviour
             new(sniper, _sniperView, _desktopInput, gameLoopService, shooterService, hudUpdateService);
         _sniperView.Construct(sniperPresenter);
         HealthBar healthBar = new HealthBar(sniper.StartHealth);
-        HealthBarPresenter healthBarPresenter = new HealthBarPresenter(hudUpdateService, healthBar, _healthBarView);
+        HealthBarPresenter healthBarPresenter = new (hudUpdateService, healthBar, _healthBarView);
         _healthBarView.Construct(healthBarPresenter);
         Criminal criminal = new(10f);
         CriminalPresenter criminalPresenter =
             new(criminal, _criminalView, gameLoopService, shooterService, hudUpdateService);
         _criminalView.Construct(criminalPresenter);
         Gun pistol = new();
-        GunPresenter pistolPresenter = new(pistol, _pistolView, _gunConfigs[0]);
+        GunPresenter pistolPresenter = new(pistol, _pistolView, _levelConfigs.GunConfigs[0]);
         _pistolView.Construct(pistolPresenter);
         shooterService.RegistyWeapon(sniper, rifle);
         shooterService.RegistyWeapon(criminal, pistol);

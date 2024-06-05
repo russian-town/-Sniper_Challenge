@@ -35,6 +35,10 @@ namespace Source.Root
             _input.ShootButtonDown += OnShootButtonDown;
             _gameLoopService.CameraRotationChanged += OnCameraRotationChanged;
             _view.DamageRecived += OnDamageRecived;
+            _sniper.HeadShot += OnHeadShot;
+            _sniper.HipfireShot += OnHipfireShot;
+            _sniper.ThroughCoverHit += OnThroughCoverHit;
+            _sniper.MultiKill += OnMultiKill;
             _sniper.HealthChanged += OnHealthChanged;
             _sniper.Died += OnDied;
         }
@@ -45,6 +49,10 @@ namespace Source.Root
             _input.ShootButtonDown -= OnShootButtonDown;
             _gameLoopService.CameraRotationChanged -= OnCameraRotationChanged;
             _view.DamageRecived -= OnDamageRecived;
+            _sniper.HeadShot -= OnHeadShot;
+            _sniper.HipfireShot -= OnHipfireShot;
+            _sniper.ThroughCoverHit -= OnThroughCoverHit;
+            _sniper.MultiKill -= OnMultiKill;
             _sniper.HealthChanged -= OnHealthChanged;
             _sniper.Died -= OnDied;
         }
@@ -63,6 +71,24 @@ namespace Source.Root
 
         private void OnDamageRecived(float damage, Vector3 point)
             => _sniper.TakeDamage(damage, point);
+
+
+        private void OnMultiKill(int killCount)
+        {
+            if (killCount < 3)
+                _gameLoopService.ShowAchievement(AchievementsType.DoubleKill);
+            else
+                _gameLoopService.ShowAchievement(AchievementsType.MultiKill);
+        }
+
+        private void OnThroughCoverHit()
+            => _gameLoopService.ShowAchievement(AchievementsType.ThroughCoverHit);
+
+        private void OnHipfireShot()
+            => _gameLoopService.ShowAchievement(AchievementsType.HipfireShot);
+
+        private void OnHeadShot()
+            => _gameLoopService.ShowAchievement(AchievementsType.HeadShot);
 
         private void OnHealthChanged(float value)
             => _hudUpdateService.UpdateHealthBar(value);

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d622b29e9059e46a0db5377832c977, type: 3}
+  m_Name: DoubleKill
+  m_EditorClassIdentifier: 
+  <Template>k__BackingField: {fileID: 7320126456790222212, guid: d45529c6b76e98045b15a4905e19790f, type: 3}
+  <Score>k__BackingField: 450
+  <Type>k__BackingField: 1
