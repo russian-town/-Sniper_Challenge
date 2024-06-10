@@ -10,7 +10,7 @@ namespace Source.Root
         private readonly CriminalView _view;
         private readonly GameLoopService _gameLoopService;
         private readonly ShooterService _shooterService;
-        private readonly HudUpdateService _hudUpdateService;
+        private readonly DamageBarFactory _damageBarFactory;
         private readonly Dictionary<Type, State> _states;
 
         private State _activeState;
@@ -21,13 +21,13 @@ namespace Source.Root
             CriminalView view,
             GameLoopService gameLoopService,
             ShooterService shooterService,
-            HudUpdateService hudUpdateService)
+            DamageBarFactory damageBarFactory)
         {
             _criminal = criminal;
             _view = view;
             _gameLoopService = gameLoopService;
             _shooterService = shooterService;
-            _hudUpdateService = hudUpdateService;
+            _damageBarFactory = damageBarFactory;
             State idleState = new IdleState(this);
             State detectingState = new DetectingState(this, view, _sniper);
             State lookingState = new LookingState(this, view);
@@ -75,7 +75,10 @@ namespace Source.Root
         }
 
         private void OnDamageRecived(float damage, Vector3 point)
-            => _criminal.TakeDamage(damage, point);
+        {
+            _damageBarFactory.Create(damage, _view.DamageViewPoint.position);
+            _criminal.TakeDamage(damage, point);
+        }
 
         private void OnHealthChanged(float currentHealth)
             => _view.UpdateHealth(currentHealth);
@@ -102,6 +105,8 @@ namespace Source.Root
         }
 
         private void OnDamageProcessed(float damage, Vector3 point)
-            => _view.PlayHitAnimation(damage, point);
+        {
+            _view.PlayHitAnimation(damage, point);
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace Source.Root
             _viewTemplateByTypes.Add(typeof(GunView), levelConfig.GunViewTemplate);
             _viewTemplateByTypes.Add(typeof(CriminalView), levelConfig.CriminalViewTemplate);
             _viewTemplateByTypes.Add(typeof(BulletView), levelConfig.BulletViewTemplate);
+            _viewTemplateByTypes.Add(typeof(DamageBarView), levelConfig.DamageBarViewTemplate);
         }
 
         public T GetViewTemplate<T>() where T : MonoBehaviour

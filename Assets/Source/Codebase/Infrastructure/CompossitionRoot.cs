@@ -50,12 +50,13 @@ public class CompossitionRoot : MonoBehaviour
         SniperPresenter sniperPresenter =
             new(sniper, _sniperView, _desktopInput, gameLoopService, shooterService, hudUpdateService);
         _sniperView.Construct(sniperPresenter);
-        HealthBar healthBar = new HealthBar(sniper.StartHealth);
+        HealthBar healthBar = new(sniper.StartHealth);
         HealthBarPresenter healthBarPresenter = new (hudUpdateService, healthBar, _healthBarView);
         _healthBarView.Construct(healthBarPresenter);
+        DamageBarFactory damageBarFactory = new(staticDataService);
         Criminal criminal = new(10f);
         CriminalPresenter criminalPresenter =
-            new(criminal, _criminalView, gameLoopService, shooterService, hudUpdateService);
+            new(criminal, _criminalView, gameLoopService, shooterService, damageBarFactory);
         _criminalView.Construct(criminalPresenter);
         Gun pistol = new();
         GunPresenter pistolPresenter = new(pistol, _pistolView, _levelConfigs.GunConfigs[0]);

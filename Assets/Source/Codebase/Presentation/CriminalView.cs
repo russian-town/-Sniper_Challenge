@@ -15,6 +15,8 @@ namespace Source.Root
 
         private Transform _sniper;
 
+        [field: SerializeField] public Transform DamageViewPoint { get; private set; }
+
         public event Action<float, Vector3> DamageRecived;
         public event Action Shot;
 
