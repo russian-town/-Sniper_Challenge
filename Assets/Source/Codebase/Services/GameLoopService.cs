@@ -16,18 +16,18 @@ namespace Source.Root
             _achievementsBoard = achievementsBoard;
         }
 
-        public event Action<float> AimEnter;
-        public event Action<float> AimExit;
+        public event Action AimEnter;
+        public event Action AimExit;
         public event Action Shot;
         public event Action<float> CameraRotationChanged;
         public event Action<Transform> SniperShot;
         public event Action SniperDied;
 
-        public void EnterToAim(float animationLenht)
-            => AimEnter?.Invoke(animationLenht);
+        public void EnterToAim()
+            => AimEnter?.Invoke();
 
-        public void ExitOfAim(float animationLenht)
-            => AimExit?.Invoke(animationLenht);
+        public void ExitOfAim()
+            => AimExit?.Invoke();
 
         public void SniperShoot(Transform point)
         {

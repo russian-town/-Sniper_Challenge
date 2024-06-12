@@ -2,12 +2,14 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Source.Root
 {
-    public class AchievementView : ViewBase
+    public class AchievementView : ViewBase, IAchievementView
     {
         [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private Image _image;
         [SerializeField] private float _duration = .5f;
         [SerializeField] private TMP_Text _name;
         [SerializeField] private TMP_Text _score;
@@ -28,14 +30,7 @@ namespace Source.Root
             _score.text = scoreText;
         }
 
-        public async void SetParent(RectTransform parent)
-        {
-            _rectTransform.SetParent(parent, false);
-            await ShowAnimation();
-            Destroy();
-        } 
-
-        private async UniTask ShowAnimation()
+        public async UniTask ShowAnimation()
         {
             Sequence sequence = DOTween.Sequence();
             sequence.Append(_canvasGroup.DOFade(1f, .35f));
@@ -46,5 +41,11 @@ namespace Source.Root
                     Ease.OutBack)).Join(_canvasGroup.DOFade(0f, .5f));
             await UniTask.WaitUntil(() => sequence.IsActive() == false);
         }
+
+        public void SetParent(RectTransform parent)
+            => _rectTransform.SetParent(parent, false);
+
+        public void SetSprite(Sprite sprite)
+            => _image.sprite = sprite;
     }
 }

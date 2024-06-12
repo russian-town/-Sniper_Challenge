@@ -15,8 +15,10 @@ namespace Source.Root
         {
             AchievementConfig config =
                 _staticDataServis.GetAchievementConfig(achievement.Type);
-            AchievementView view = Object.Instantiate(config.Template);
+            AchievementView template = _staticDataServis.GetViewTemplate<AchievementView>();
+            AchievementView view = Object.Instantiate(template);
             AchievementPresenter presenter = new(achievement, view);
+            view.SetSprite(config.Sprite);
             view.Construct(presenter);
             RectTransform parent = board.GetParent();
             view.SetParent(parent);

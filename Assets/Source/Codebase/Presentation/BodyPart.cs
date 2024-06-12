@@ -13,6 +13,8 @@ namespace Source.Root
 
         public BodyPartName Name => _name;
 
+        public CriminalView CriminalView => _view;
+
         public void TakeDamage(float damage, Vector3 point)
         {
             float calculatedDamage = damage * _damageMultiplier;

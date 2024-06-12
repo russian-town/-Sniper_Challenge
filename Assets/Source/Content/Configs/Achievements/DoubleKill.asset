@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d622b29e9059e46a0db5377832c977, type: 3}
   m_Name: DoubleKill
   m_EditorClassIdentifier: 
-  <Template>k__BackingField: {fileID: 7320126456790222212, guid: d45529c6b76e98045b15a4905e19790f, type: 3}
+  <Sprite>k__BackingField: {fileID: 21300000, guid: 5a0d1085e1f1777438ee19d43b8f65ac, type: 3}
   <Score>k__BackingField: 450
   <Type>k__BackingField: 1

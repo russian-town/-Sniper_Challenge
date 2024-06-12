@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d622b29e9059e46a0db5377832c977, type: 3}
   m_Name: MultiKill
   m_EditorClassIdentifier: 
-  <Template>k__BackingField: {fileID: -7874757559018621924, guid: c3c06a0166d4a834196480fd8c3d7d14, type: 3}
+  <Sprite>k__BackingField: {fileID: 21300000, guid: c72746f20f47bac4e9f8a0b0254f3b54, type: 3}
   <Score>k__BackingField: 1000
   <Type>k__BackingField: 2

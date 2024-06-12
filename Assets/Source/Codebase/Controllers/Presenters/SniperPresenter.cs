@@ -58,12 +58,18 @@ namespace Source.Root
         }
 
         private async void OnAimButtonDown()
-            => await Aim();
+        {
+            if (_sniper.InAim == false)
+                await EnterToAim();
+            else
+                ExitOfAim();
+        }
 
         private void OnShootButtonDown()
         {
             _shooterService.CreateBullet(_sniper);
             _gameLoopService.SniperShoot(_view.TargetOfCriminal);
+            ExitOfAim();
         }
 
         private void OnCameraRotationChanged(float angle)
@@ -96,22 +102,19 @@ namespace Source.Root
         private void OnDied()
             => _gameLoopService.CallEventOfSniperDied();
 
-        private async UniTask Aim()
+        private async UniTask EnterToAim()
         {
-            if(_sniper.InAim == false)
-            {
-                float animationLenht = _view.EnterToAim();
-                await UniTask.Delay(TimeSpan.FromSeconds(animationLenht));
-                _sniper.EnterToAim();
-                _gameLoopService.EnterToAim(animationLenht);
-            }
-            else
-            {
-                float animationLenht = _view.ExitOfAim();
-                _gameLoopService.ExitOfAim(animationLenht);
-                await UniTask.Delay(TimeSpan.FromSeconds(animationLenht));
-                _sniper.ExitOfAim();
-            }
+            float animationLenht = _view.EnterToAim();
+            await UniTask.Delay(TimeSpan.FromSeconds(animationLenht));
+            _sniper.EnterToAim();
+            _gameLoopService.EnterToAim();
+        }
+
+        private void ExitOfAim()
+        {
+            _view.ExitOfAim();
+            _gameLoopService.ExitOfAim();
+            _sniper.ExitOfAim();
         }
     }
 }

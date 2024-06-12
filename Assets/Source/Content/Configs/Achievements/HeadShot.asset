@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d622b29e9059e46a0db5377832c977, type: 3}
   m_Name: HeadShot
   m_EditorClassIdentifier: 
-  <Template>k__BackingField: {fileID: 5498489366171100214, guid: 9c0f20582ebb36b469b68f851da02821, type: 3}
+  <Sprite>k__BackingField: {fileID: 21300000, guid: 1328502333cf1154dadadfa2afe39c46, type: 3}
   <Score>k__BackingField: 200
   <Type>k__BackingField: 0

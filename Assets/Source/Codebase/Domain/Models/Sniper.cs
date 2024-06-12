@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Source.Root
@@ -51,15 +52,21 @@ namespace Source.Root
             if (results.Length == 0)
                 return ray.origin + ray.direction * DefaultHitDistance;
 
-            int criminalCount = 0;
+            HashSet<CriminalView> criminals = new();
+            CriminalView currentCriminal = null;
 
             for (int i = 0; i < results.Length; i++)
             {
                 if (results[i].transform.TryGetComponent(out IBodyPart bodyPart))
                 {
+                    if (bodyPart.CriminalView == currentCriminal)
+                        continue;
+
+                    currentCriminal = bodyPart.CriminalView;
+
                     if (bodyPart.CheckDead(bullet.Damage))
                     {
-                        criminalCount++;
+                        criminals.Add(bodyPart.CriminalView);
 
                         if (bodyPart.Name == BodyPartName.Head)
                             HeadShot?.Invoke();
@@ -78,8 +85,8 @@ namespace Source.Root
                     }
                 }
 
-                if (criminalCount > 1)
-                    MultiKill?.Invoke(criminalCount);
+                if (criminals.Count > 1)
+                    MultiKill?.Invoke(criminals.Count);
             }
 
             foreach (var result in results)

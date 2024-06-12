@@ -1,8 +1,4 @@
-using System;
-
 namespace Source.Root
 {
-    public class Scope
-    {
-    }
+    public class Scope { }
 }

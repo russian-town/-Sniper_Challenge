@@ -16,6 +16,7 @@ MonoBehaviour:
   <CriminalViewTemplate>k__BackingField: {fileID: 7403334722366155249, guid: eec3bbd6afa733a40b1bbad4fc4fa67c, type: 3}
   <BulletViewTemplate>k__BackingField: {fileID: 8668391808846079463, guid: c3e7eb6c567a03e4ca36646973e352fb, type: 3}
   <DamageBarViewTemplate>k__BackingField: {fileID: 8849809287806582260, guid: 6dac08a2671723449aa98c52c6d3da80, type: 3}
+  <AchievementsView>k__BackingField: {fileID: 6464561200684305102, guid: d45529c6b76e98045b15a4905e19790f, type: 3}
   <GunConfigs>k__BackingField:
   - {fileID: 11400000, guid: 041ffc69f92b566468d24e59c47a981b, type: 2}
   <InputData>k__BackingField:

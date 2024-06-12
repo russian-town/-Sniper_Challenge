@@ -9,6 +9,7 @@ namespace Source.Root
         [field: SerializeField] public CriminalView CriminalViewTemplate { get; private set; }
         [field: SerializeField] public BulletView BulletViewTemplate { get; private set; }
         [field: SerializeField] public DamageBarView DamageBarViewTemplate { get; private set; }
+        [field: SerializeField] public AchievementView AchievementsView { get; private set; }
         [field: SerializeField] public GunConfig[] GunConfigs { get; private set; }
         [field: SerializeField] public InputData InputData { get; private set; }
         [field: SerializeField] public BulletConfig BulletConfig { get; private set; }

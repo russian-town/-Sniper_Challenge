@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 
 namespace Source.Root
@@ -39,16 +38,16 @@ namespace Source.Root
         private void OnShot()
             => _scopeView.Shoot();
 
-        private void OnAimEnter(float animationLenht)
+        private void OnAimEnter()
         {
             _scopeView.Show();
-            _camera.DOFieldOfView(ScopeFildOfView, animationLenht);
+            _camera.fieldOfView = ScopeFildOfView;
         }
 
-        private void OnAimExit(float animationLenht)
+        private void OnAimExit()
         {
             _scopeView.Hide();
-            _camera.DOFieldOfView(DefaultFildOfView, animationLenht);
+            _camera.fieldOfView = DefaultFildOfView;
         }
     }
 }
