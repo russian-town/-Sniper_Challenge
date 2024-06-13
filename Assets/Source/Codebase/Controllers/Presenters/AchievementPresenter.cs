@@ -14,8 +14,10 @@ namespace Source.Root
             _view.ResetAnimation();
         }
 
-        public void Enable()
+        public async void Enable()
         {
+            await _view.ShowAnimation();
+            _view.Destroy();
         }
 
         public void Disable()
