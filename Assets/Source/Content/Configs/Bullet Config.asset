@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56116e51c5fbf274588e9bca81b78806, type: 3}
   m_Name: Bullet Config
   m_EditorClassIdentifier: 
+  <Type>k__BackingField: 0
   <Damage>k__BackingField: 10
-  <FlightSpeed>k__BackingField: 40
+  <Speed>k__BackingField: 10

@@ -6,7 +6,7 @@ namespace Source.Root
 {
     public class AchievementFactory
     {
-        private readonly IStaticDataServis _staticDataServis;
+        private readonly IStaticDataService _staticDataServis;
         private readonly Canvas _canvas;
         private readonly Vector3 _localPosition;
         private readonly Queue<AchievementsType> _achievements;
@@ -14,7 +14,7 @@ namespace Source.Root
         private bool _inProcess = false;
 
         public AchievementFactory(
-            IStaticDataServis staticDataServis,
+            IStaticDataService staticDataServis,
             Canvas canvas,
             Vector3 localPosition)
         {

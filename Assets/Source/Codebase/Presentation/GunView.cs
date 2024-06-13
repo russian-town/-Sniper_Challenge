@@ -8,6 +8,9 @@ namespace Source.Root
 
         [field: SerializeField] public Transform GunEnd {  get; private set; }
 
+        public void SetLocalRotation(Quaternion localRotation)
+            => transform.localRotation = localRotation;
+
         public void Shoot()
             => _muzzleFlash.Play();
     }

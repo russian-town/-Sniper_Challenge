@@ -1,3 +1,4 @@
+using Source.Codebase.Domain;
 using UnityEngine;
 
 namespace Source.Root
@@ -12,5 +13,8 @@ namespace Source.Root
         [field: SerializeField] public float AccuracyFromHip { get; private set; }
         [field: SerializeField] public float AimSpeed { get; private set; }
         [field: SerializeField] public Sprite ScopeSprite { get; private set; }
+        [field: SerializeField] public BulletType BulletType { get; private set; }
+        [field: SerializeField] public GunType Type { get; private set; }
+        [field: SerializeField] public GunView Template { get; private set; }
     }
 }

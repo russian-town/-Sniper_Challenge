@@ -188,6 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _transform: {fileID: 4196147985800954887}
+  <Rigidbody>k__BackingField: {fileID: 0}
 --- !u!1 &2476172168147310042
 GameObject:
   m_ObjectHideFlags: 0

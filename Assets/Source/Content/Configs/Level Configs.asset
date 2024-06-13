@@ -19,10 +19,9 @@ MonoBehaviour:
   <AchievementsView>k__BackingField: {fileID: 6464561200684305102, guid: d45529c6b76e98045b15a4905e19790f, type: 3}
   <GunConfigs>k__BackingField:
   - {fileID: 11400000, guid: 041ffc69f92b566468d24e59c47a981b, type: 2}
-  <InputData>k__BackingField:
-    SensitivityOfLookAndle: 5
-    SensitivityOfTitleAngle: 5
-  <BulletConfig>k__BackingField: {fileID: 11400000, guid: 9b3e6b16ab0b5b04083a550c78c36b73, type: 2}
+  - {fileID: 11400000, guid: d4cd04ece0366814a9e2982e368b1bbd, type: 2}
+  <BulletConfigs>k__BackingField:
+  - {fileID: 11400000, guid: 9b3e6b16ab0b5b04083a550c78c36b73, type: 2}
   <AchievementsConfigs>k__BackingField:
   - {fileID: 11400000, guid: 8aa865678c3a4f0409054b61238802f7, type: 2}
   - {fileID: 11400000, guid: 9e8a092719608b645b61bd92168f5d39, type: 2}
@@ -30,3 +29,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aafa7ba1b04d34e4c9361342fc04b2db, type: 2}
   - {fileID: 11400000, guid: 08d06140170545a46b36f82376ed00a9, type: 2}
   <CameraConfig>k__BackingField: {fileID: 11400000, guid: 192416d7df770be44930659bca71be40, type: 2}
+  <InputData>k__BackingField:
+    SensitivityOfLookAndle: 5
+    SensitivityOfTitleAngle: 5

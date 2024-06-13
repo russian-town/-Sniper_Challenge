@@ -8,9 +8,12 @@ namespace Source.Root
         [SerializeField][Range(0f, 1f)] private float _ikWeight = 1f;
         [SerializeField] private Transform _leftHandPoint;
 
+        public void SetLeftHandPoint(Transform leftHandPoint)
+            => _leftHandPoint = leftHandPoint;
+
         private void OnAnimatorIK()
         {
-            if (_animator == null)
+            if (_animator == null || _leftHandPoint == null)
                 return;
 
             _animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, _ikWeight);

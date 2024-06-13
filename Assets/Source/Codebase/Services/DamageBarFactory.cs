@@ -4,9 +4,9 @@ namespace Source.Root
 {
     public class DamageBarFactory
     {
-        private readonly IStaticDataServis _staticDataService;
+        private readonly IStaticDataService _staticDataService;
 
-        public DamageBarFactory(IStaticDataServis staticDataService)
+        public DamageBarFactory(IStaticDataService staticDataService)
         {
             _staticDataService = staticDataService;
         }

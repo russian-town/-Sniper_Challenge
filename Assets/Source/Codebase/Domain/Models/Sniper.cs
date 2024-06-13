@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Source.Root
 {
-    public class Sniper : ICharacter, IDamageable
+    public class Sniper : IDamageable
     {
         private const float DefaultHitDistance = 10f;
 
@@ -43,7 +42,7 @@ namespace Source.Root
                 Died?.Invoke();
         }
 
-        public Vector3 CalculateTrajectory(IGun gun, IBullet bullet)
+       /* public Vector3 GetDirection()
         {
             bool inAim = InAim;
             Ray ray = new(_camera.transform.position, _camera.transform.forward);
@@ -95,6 +94,6 @@ namespace Source.Root
             }
 
             return gun.EndPoint.position + (results[0].point - gun.EndPoint.position);
-        }
+        }*/
     }
 }

@@ -17,6 +17,7 @@ namespace Source.Root
         private float _startRotation;
 
         [field: SerializeField] public Transform TargetOfCriminal { get; private set; }
+        [field: SerializeField] public Transform GunPoint { get; private set; }
 
         public event Action<float, Vector3> DamageRecived;
 

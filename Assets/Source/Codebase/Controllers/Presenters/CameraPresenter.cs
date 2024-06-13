@@ -1,3 +1,4 @@
+using Source.Codebase.Domain;
 using UnityEngine;
 
 namespace Source.Root
@@ -53,8 +54,11 @@ namespace Source.Root
         private void OnAxisMoved(float horizontal, float vertical)
             => RotateCamera(horizontal, vertical);
 
-        private void OnShot()
-            => _view.PlayRecoil(_staticDataService.RecoilForce);
+        private void OnShot(GunType gunType)
+        {
+            GunConfig gunConfig = _staticDataService.GetGunConfig(gunType);
+            _view.PlayRecoil(gunConfig.RecoilForce);
+        }
 
         private void RotateCamera(float horizontal, float vertical)
         {

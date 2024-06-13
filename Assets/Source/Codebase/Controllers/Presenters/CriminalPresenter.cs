@@ -1,3 +1,5 @@
+using Source.Codebase.Domain;
+using Source.Codebase.Services;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +11,9 @@ namespace Source.Root
         private readonly Criminal _criminal;
         private readonly CriminalView _view;
         private readonly GameLoopService _gameLoopService;
-        private readonly ShooterService _shooterService;
         private readonly DamageBarFactory _damageBarFactory;
         private readonly Dictionary<Type, State> _states;
+        private readonly GunFactory _gunFactory;
 
         private State _activeState;
         private Transform _sniper;
@@ -20,14 +22,15 @@ namespace Source.Root
             Criminal criminal,
             CriminalView view,
             GameLoopService gameLoopService,
-            ShooterService shooterService,
-            DamageBarFactory damageBarFactory)
+            DamageBarFactory damageBarFactory,
+            GunFactory gunFactory)
         {
             _criminal = criminal;
             _view = view;
             _gameLoopService = gameLoopService;
-            _shooterService = shooterService;
             _damageBarFactory = damageBarFactory;
+            _gunFactory = gunFactory;
+            _gunFactory.Create(GunType.Pistol, _view.GunPoint);
             State idleState = new IdleState(this);
             State detectingState = new DetectingState(this, view, _sniper);
             State lookingState = new LookingState(this, view);
@@ -94,14 +97,12 @@ namespace Source.Root
         private void OnSniperDied()
             => Enter<IdleState>();
 
-        private void OnShot()
-            => _shooterService.CreateBullet(_criminal);
+        private void OnShot() { }
 
         private void OnDied()
         {
             _activeState?.Exit();
             _view.PlayDiedAnimation();
-            _shooterService.UnregistryWeapon(_criminal);
         }
 
         private void OnDamageProcessed(float damage, Vector3 point)

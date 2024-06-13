@@ -1,28 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Source.Codebase.Domain;
 using UnityEngine;
 
 namespace Source.Root
 {
-    public class StaticDataService : IStaticDataServis
+    public class StaticDataService : IStaticDataService
     {
         private readonly Dictionary<Type, object> _viewTemplateByTypes;
         
         private Dictionary<AchievementsType, AchievementConfig> _achivementConfigByType;
-        private GunConfig[] _gunConfigs;
+        private Dictionary<BulletType, BulletConfig> _bulletConfigByType;
+        private Dictionary<GunType, GunConfig> _gunConfigByType;
 
         public StaticDataService()
         {
             _viewTemplateByTypes = new();
             _achivementConfigByType = new();
+            _bulletConfigByType = new();
         }
-
-        public float RecoilForce => _gunConfigs[0].RecoilForce;
 
         public void LoadConfigs(LevelConfigs levelConfig)
         {
             LoadAchievementConfigs(levelConfig.AchievementsConfigs);
+            LoadBulletConfigs(levelConfig.BulletConfigs);
             LoadGunConfigs(levelConfig.GunConfigs);
 
             _viewTemplateByTypes.Clear();
@@ -49,6 +51,22 @@ namespace Source.Root
             return _achivementConfigByType[achievementsType];
         }
 
+        public BulletConfig GetBulletConfig(BulletType bulletType)
+        {
+            if (_bulletConfigByType.ContainsKey(bulletType) == false)
+                throw new Exception($"BulletConfig for BulletType {bulletType} does not exist!");
+
+            return _bulletConfigByType[bulletType];
+        }
+
+        public GunConfig GetGunConfig(GunType gunType)
+        {
+            if (_gunConfigByType.ContainsKey(gunType) == false)
+                throw new Exception($"GunConfig for GunType {gunType} does not exist!");
+
+            return _gunConfigByType[gunType];
+        }
+
         private void LoadAchievementConfigs(AchievementConfig[] configs)
         {
             if (configs.Length != configs.Distinct().Count())
@@ -58,9 +76,22 @@ namespace Source.Root
                 configs.ToDictionary(achivementConfig => achivementConfig.Type, achivementConfig => achivementConfig);
         }
 
-        private void LoadGunConfigs(GunConfig[] gunConfigs)
+        private void LoadBulletConfigs(BulletConfig[] configs)
         {
-            _gunConfigs = gunConfigs;
+            if (configs.Length != configs.Distinct().Count())
+                throw new Exception("All achievementConfig must be distinct");
+
+            _bulletConfigByType =
+                configs.ToDictionary(bulletConfig => bulletConfig.Type, bulletConfig => bulletConfig);
+        }
+
+        private void LoadGunConfigs(GunConfig[] configs)
+        {
+            if (configs.Length != configs.Distinct().Count())
+                throw new Exception("All achievementConfig must be distinct");
+
+            _gunConfigByType =
+                 configs.ToDictionary(gunConfig => gunConfig.Type, gunConfig => gunConfig);
         }
     }
 }

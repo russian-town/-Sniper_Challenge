@@ -1,5 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Source.Codebase.Domain;
+using Source.Codebase.Services;
 using UnityEngine;
 
 namespace Source.Root
@@ -10,26 +12,29 @@ namespace Source.Root
         private readonly SniperView _view;
         private readonly IInput _input;
         private readonly GameLoopService _gameLoopService;
-        private readonly ShooterService _shooterService;
         private readonly HudUpdateService _hudUpdateService;
         private readonly AchievementFactory _achievementFactory;
+        private readonly GunFactory _gunFactory;
+        private readonly Camera _camera;
 
         public SniperPresenter(Sniper sniper,
             SniperView view,
             IInput input,
             GameLoopService gameLoopService,
-            ShooterService shooterService,
             HudUpdateService hudUpdateService,
-            AchievementFactory achievementFactory)
+            AchievementFactory achievementFactory,
+            GunFactory gunFactory)
         {
             _sniper = sniper;
             _view = view;
             _input = input;
             _gameLoopService = gameLoopService;
-            _shooterService = shooterService;
             _view.Initialize();
             _hudUpdateService = hudUpdateService;
             _achievementFactory = achievementFactory;
+            _gunFactory = gunFactory;
+            _gunFactory.Create(GunType.Rifle, _view.GunPoint);
+            _camera = Camera.main;
         }
 
         public void Enable()
@@ -68,10 +73,10 @@ namespace Source.Root
                 ExitOfAim();
         }
 
-        private void OnShootButtonDown()
+        private async void OnShootButtonDown()
         {
-            _shooterService.CreateBullet(_sniper);
-            _gameLoopService.SniperShoot(_view.TargetOfCriminal);
+            _gameLoopService.SniperShoot(_view.TargetOfCriminal, GunType.Rifle);
+            await UniTask.WaitForSeconds(.35f);
             ExitOfAim();
         }
 
@@ -80,7 +85,6 @@ namespace Source.Root
 
         private void OnDamageRecived(float damage, Vector3 point)
             => _sniper.TakeDamage(damage, point);
-
 
         private void OnMultiKill(int killCount)
         {
@@ -94,16 +98,10 @@ namespace Source.Root
             => _achievementFactory.Create(AchievementsType.ThroughCoverHit);
 
         private void OnHipfireShot()
-        {
-            _achievementFactory.Create(AchievementsType.HipfireShot);
-            Debug.Log("HipFire");
-        }
+            => _achievementFactory.Create(AchievementsType.HipfireShot);
 
         private void OnHeadShot()
-        {
-            _achievementFactory.Create(AchievementsType.HeadShot);
-            Debug.Log("Headshot");
-        } 
+            => _achievementFactory.Create(AchievementsType.HeadShot);
 
         private void OnHealthChanged(float value)
             => _hudUpdateService.UpdateHealthBar(value);

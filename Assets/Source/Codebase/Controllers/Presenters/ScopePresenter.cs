@@ -1,3 +1,4 @@
+using Source.Codebase.Domain;
 using UnityEngine;
 
 namespace Source.Root
@@ -35,7 +36,7 @@ namespace Source.Root
             _gameLoopService.Shot -= OnShot;
         }
 
-        private void OnShot()
+        private void OnShot(GunType gunType)
             => _scopeView.Shoot();
 
         private void OnAimEnter()

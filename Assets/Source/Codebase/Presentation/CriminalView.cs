@@ -11,11 +11,11 @@ namespace Source.Root
         [SerializeField] private Animator _animator;
         [SerializeField] private BodyPart[] _bodyParts;
         [SerializeField] private Transform _transform;
-        [SerializeField] private Transform _gunEnd;
 
         private Transform _sniper;
 
         [field: SerializeField] public Transform DamageViewPoint { get; private set; }
+        [field: SerializeField] public Transform GunPoint { get; private set; }
 
         public event Action<float, Vector3> DamageRecived;
         public event Action Shot;

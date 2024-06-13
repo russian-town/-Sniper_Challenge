@@ -1,4 +1,5 @@
 using System;
+using Source.Codebase.Domain;
 using UnityEngine;
 
 namespace Source.Root
@@ -7,7 +8,7 @@ namespace Source.Root
     {
         public event Action AimEnter;
         public event Action AimExit;
-        public event Action Shot;
+        public event Action<GunType> Shot;
         public event Action<float> CameraRotationChanged;
         public event Action<Transform> SniperShot;
         public event Action SniperDied;
@@ -18,9 +19,9 @@ namespace Source.Root
         public void ExitOfAim()
             => AimExit?.Invoke();
 
-        public void SniperShoot(Transform point)
+        public void SniperShoot(Transform point, GunType gunType)
         {
-            Shot?.Invoke();
+            Shot?.Invoke(gunType);
             SniperShot?.Invoke(point);
         }
 

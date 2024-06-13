@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Source.Root
 {
-    public class Criminal : ICharacter, IDamageable
+    public class Criminal : IDamageable
     {
         private readonly Health _health;
 
@@ -24,21 +25,21 @@ namespace Source.Root
         public void SetTarget(Transform target)
             => _target = target;
 
-        public Vector3 CalculateTrajectory(IGun gun, IBullet bullet)
+       /* public Queue<Vector3> GetDirection()
         {
+
             Vector3 direction = _target.position - gun.EndPoint.position;
             Ray ray = new(gun.EndPoint.position, direction);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, gun.Range))
             {
-                bullet.SetResult(hitInfo);
                 return gun.EndPoint.position + (hitInfo.point - gun.EndPoint.position);
             }
             else
             {
                 return gun.EndPoint.position + gun.EndPoint.forward * gun.Range;
             }
-        }
+        }*/
 
         public void TakeDamage(float damage, Vector3 point)
         {

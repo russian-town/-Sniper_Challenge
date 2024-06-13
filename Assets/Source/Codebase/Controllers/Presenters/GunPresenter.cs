@@ -4,28 +4,28 @@ namespace Source.Root
     {
         private readonly GunView _view;
         private readonly Gun _gun;
+        private readonly GunConfig _config;
+        private readonly BulletFactory _bulletFactory;
 
-        public GunPresenter(Gun gun, GunView view, GunConfig config)
+        public GunPresenter(Gun gun,
+            GunView view,
+            GunConfig config,
+            BulletFactory bulletFactory)
         {
             _view = view;
             _gun = gun;
-            _gun.SetConfig(config);
-            _gun.SetEndPoint(_view.GunEnd);
+            _config = config;
+            _bulletFactory = bulletFactory;
         }
 
-        public void Enable()
-        {
-            _gun.Shot += OnShot;
-        }
+        public void Enable() { }
 
-        public void Disable()
-        {
-            _gun.Shot -= OnShot;
-        }
+        public void Disable() { }
 
-        private void OnShot()
+        public void Shoot()
         {
             _view.Shoot();
+            _bulletFactory.Create(_view.GunEnd.position, _config.BulletType);
         }
     }
 }
