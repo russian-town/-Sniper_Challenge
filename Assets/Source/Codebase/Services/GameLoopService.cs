@@ -5,17 +5,6 @@ namespace Source.Root
 {
     public class GameLoopService
     {
-        private readonly IAchievementService _achievementService;
-        private readonly AchievementsBoard _achievementsBoard;
-
-        public GameLoopService(
-            IAchievementService achievementService,
-            AchievementsBoard achievementsBoard)
-        {
-            _achievementService = achievementService;
-            _achievementsBoard = achievementsBoard;
-        }
-
         public event Action AimEnter;
         public event Action AimExit;
         public event Action Shot;
@@ -34,9 +23,6 @@ namespace Source.Root
             Shot?.Invoke();
             SniperShot?.Invoke(point);
         }
-
-        public void ShowAchievement(AchievementsType achievementsType)
-            => _achievementService.FillBoard(_achievementsBoard, achievementsType);
 
         public void CallEventOfSniperDied()
             => SniperDied?.Invoke();

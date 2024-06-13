@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Source.Root
 {
     public class AchievementPresenter : IPresenter
@@ -14,14 +12,8 @@ namespace Source.Root
             _view.ResetAnimation();
         }
 
-        public async void Enable()
-        {
-            await _view.ShowAnimation();
-            _view.Destroy();
-        }
+        public void Enable() { }
 
-        public void Disable()
-        {
-        }
+        public void Disable() { }
     }
 }

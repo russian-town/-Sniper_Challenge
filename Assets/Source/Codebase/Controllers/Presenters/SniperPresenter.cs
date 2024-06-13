@@ -12,13 +12,15 @@ namespace Source.Root
         private readonly GameLoopService _gameLoopService;
         private readonly ShooterService _shooterService;
         private readonly HudUpdateService _hudUpdateService;
+        private readonly AchievementFactory _achievementFactory;
 
         public SniperPresenter(Sniper sniper,
             SniperView view,
             IInput input,
             GameLoopService gameLoopService,
             ShooterService shooterService,
-            HudUpdateService hudUpdateService)
+            HudUpdateService hudUpdateService,
+            AchievementFactory achievementFactory)
         {
             _sniper = sniper;
             _view = view;
@@ -27,6 +29,7 @@ namespace Source.Root
             _shooterService = shooterService;
             _view.Initialize();
             _hudUpdateService = hudUpdateService;
+            _achievementFactory = achievementFactory;
         }
 
         public void Enable()
@@ -82,19 +85,25 @@ namespace Source.Root
         private void OnMultiKill(int killCount)
         {
             if (killCount < 3)
-                _gameLoopService.ShowAchievement(AchievementsType.DoubleKill);
+                _achievementFactory.Create(AchievementsType.DoubleKill);
             else
-                _gameLoopService.ShowAchievement(AchievementsType.MultiKill);
+                _achievementFactory.Create(AchievementsType.MultiKill);
         }
 
         private void OnThroughCoverHit()
-            => _gameLoopService.ShowAchievement(AchievementsType.ThroughCoverHit);
+            => _achievementFactory.Create(AchievementsType.ThroughCoverHit);
 
         private void OnHipfireShot()
-            => _gameLoopService.ShowAchievement(AchievementsType.HipfireShot);
+        {
+            _achievementFactory.Create(AchievementsType.HipfireShot);
+            Debug.Log("HipFire");
+        }
 
         private void OnHeadShot()
-            => _gameLoopService.ShowAchievement(AchievementsType.HeadShot);
+        {
+            _achievementFactory.Create(AchievementsType.HeadShot);
+            Debug.Log("Headshot");
+        } 
 
         private void OnHealthChanged(float value)
             => _hudUpdateService.UpdateHealthBar(value);

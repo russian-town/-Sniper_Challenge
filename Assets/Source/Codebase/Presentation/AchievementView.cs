@@ -1,6 +1,6 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,14 +16,14 @@ namespace Source.Root
         [SerializeField] private TMP_Text _score;
         [SerializeField] private RectTransform _rectTransform;
 
-        private readonly CancellationTokenSource _cancellationToken = new();
-
         private Sequence _sequence;
+
+        private readonly CancellationTokenSource _tokenSource = new();
 
         public void ResetAnimation()
         {
             _canvasGroup.alpha = 0;
-            _rectTransform.sizeDelta = Vector2.zero;
+            _rectTransform.localScale = Vector3.zero;
         }
 
         public void SetName(string name)
@@ -39,24 +39,18 @@ namespace Source.Root
         {
             _sequence = DOTween.Sequence();
             _sequence.Append(_canvasGroup.DOFade(1f, .35f)).Join(
-                _rectTransform.DOSizeDelta(Vector2.one, .35f));
+                _rectTransform.DOScale(Vector3.one, .35f));
             _sequence.AppendInterval(.5f);
             _sequence.Append(_canvasGroup.DOFade(0f, .5f)).Join(
-                _rectTransform.DOSizeDelta(Vector2.zero, .5f));
+                _rectTransform.DOScale(Vector3.zero, .5f));
             await UniTask.WaitUntil(
                 () => _sequence.IsActive() == false,
-                cancellationToken: _cancellationToken.Token);
-        }
-
-        public void CancelAnimation()
-        {
-            _sequence.Complete();
-            _cancellationToken.Cancel();
+                cancellationToken: _tokenSource.Token);
             Destroy();
         }
 
-        public void SetParent(RectTransform parent)
-            => _rectTransform.SetParent(parent, false);
+        public void SetPosition(Vector3 localPosition)
+            => _rectTransform.localPosition = localPosition;
 
         public void SetSprite(Sprite sprite)
             => _image.sprite = sprite;

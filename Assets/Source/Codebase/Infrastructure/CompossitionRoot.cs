@@ -18,22 +18,18 @@ public class CompossitionRoot : MonoBehaviour
     [SerializeField] private GunView _rifleView;
     [SerializeField] private GunView _pistolView;
     [SerializeField] private HealthBarView _healthBarView;
-    [SerializeField] private AchievementBoardView _achievementBoardView;
 
     [Header("UI")]
     [SerializeField] private CanvasGroup _bloodOverlay;
+    [SerializeField] private Canvas _canvas;
 
     private void Awake()
     {
         StaticDataService staticDataService = new();
         ShooterService shooterService = new(_bulletViewTemplate, _levelConfigs.BulletConfig);
-        AchievementViewFactory achievementViewFactory = new(staticDataService);
-        AchievementService achievementService = new(achievementViewFactory);
-        AchievementsBoard achievementsBoard = new();
-        AchievementBoardPresenter achievementBoardPresenter =
-            new(achievementsBoard, _achievementBoardView);
-        _achievementBoardView.Construct(achievementBoardPresenter);
-        GameLoopService gameLoopService = new(achievementService, achievementsBoard);
+        AchievementFactory achievementFactory =
+            new(staticDataService, _canvas, new(0f, 540f, 0f));
+        GameLoopService gameLoopService = new();
         HudUpdateService hudUpdateService = new();
         staticDataService.LoadConfigs(_levelConfigs);
         hudUpdateService.SetBloodOverlayImage(_bloodOverlay);
@@ -48,7 +44,13 @@ public class CompossitionRoot : MonoBehaviour
         _scopeView.Construct(scopePresenter);
         Sniper sniper = new(40f);
         SniperPresenter sniperPresenter =
-            new(sniper, _sniperView, _desktopInput, gameLoopService, shooterService, hudUpdateService);
+            new(sniper,
+            _sniperView,
+            _desktopInput,
+            gameLoopService,
+            shooterService,
+            hudUpdateService,
+            achievementFactory);
         _sniperView.Construct(sniperPresenter);
         HealthBar healthBar = new(sniper.StartHealth);
         HealthBarPresenter healthBarPresenter = new (hudUpdateService, healthBar, _healthBarView);

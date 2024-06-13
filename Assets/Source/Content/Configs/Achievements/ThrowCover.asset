@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d622b29e9059e46a0db5377832c977, type: 3}
   m_Name: ThrowCover
   m_EditorClassIdentifier: 
-  <Template>k__BackingField: {fileID: 215562225120124829, guid: 8ed82f4dfac876b4db4f0164771a99f0, type: 3}
+  <Sprite>k__BackingField: {fileID: 21300000, guid: 5b19b6bf1fde8334d9c8c55df1a8574d, type: 3}
   <Score>k__BackingField: 300
   <Type>k__BackingField: 4

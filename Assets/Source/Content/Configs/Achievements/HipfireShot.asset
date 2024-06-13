@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d622b29e9059e46a0db5377832c977, type: 3}
   m_Name: HipfireShot
   m_EditorClassIdentifier: 
-  <Template>k__BackingField: {fileID: 3092091407345280262, guid: 8f44c3ab4f9208e40a1527ea5f69a002, type: 3}
+  <Sprite>k__BackingField: {fileID: 21300000, guid: fb8416598e220fd449c0ad4ef23b9a6d, type: 3}
   <Score>k__BackingField: 350
   <Type>k__BackingField: 3
