@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Source.Root
@@ -7,8 +6,6 @@ namespace Source.Root
     public class Criminal : IDamageable
     {
         private readonly Health _health;
-
-        private Transform _target;
 
         public event Action<float> HealthChanged;
         public event Action<float, Vector3> DamageProcessed;
@@ -21,25 +18,6 @@ namespace Source.Root
             _health = new(health);
             StartHealth = health;
         }
-
-        public void SetTarget(Transform target)
-            => _target = target;
-
-       /* public Queue<Vector3> GetDirection()
-        {
-
-            Vector3 direction = _target.position - gun.EndPoint.position;
-            Ray ray = new(gun.EndPoint.position, direction);
-
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, gun.Range))
-            {
-                return gun.EndPoint.position + (hitInfo.point - gun.EndPoint.position);
-            }
-            else
-            {
-                return gun.EndPoint.position + gun.EndPoint.forward * gun.Range;
-            }
-        }*/
 
         public void TakeDamage(float damage, Vector3 point)
         {

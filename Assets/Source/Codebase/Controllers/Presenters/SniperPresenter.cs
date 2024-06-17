@@ -10,14 +10,15 @@ namespace Source.Root
     {
         private readonly Sniper _sniper;
         private readonly SniperView _view;
+        private readonly ShootService _shootService;
         private readonly IInput _input;
         private readonly GameLoopService _gameLoopService;
-        private readonly HudUpdateService _hudUpdateService;
         private readonly AchievementFactory _achievementFactory;
+        private readonly HudUpdateService _hudUpdateService;
         private readonly GunFactory _gunFactory;
-        private readonly Camera _camera;
 
-        public SniperPresenter(Sniper sniper,
+        public SniperPresenter(
+            Sniper sniper,
             SniperView view,
             IInput input,
             GameLoopService gameLoopService,
@@ -27,15 +28,15 @@ namespace Source.Root
         {
             _sniper = sniper;
             _view = view;
+            _shootService = new();
             _input = input;
             _gameLoopService = gameLoopService;
             _view.Initialize();
-            _hudUpdateService = hudUpdateService;
             _achievementFactory = achievementFactory;
+            _hudUpdateService = hudUpdateService;
             _gunFactory = gunFactory;
-            _gunFactory.Create(GunType.Rifle, _view.GunPoint);
-            _camera = Camera.main;
-        }
+            _gunFactory.Create(GunType.Rifle, _view.GunPoint, _shootService);
+        }   
 
         public void Enable()
         {
@@ -43,10 +44,6 @@ namespace Source.Root
             _input.ShootButtonDown += OnShootButtonDown;
             _gameLoopService.CameraRotationChanged += OnCameraRotationChanged;
             _view.DamageRecived += OnDamageRecived;
-            _sniper.HeadShot += OnHeadShot;
-            _sniper.HipfireShot += OnHipfireShot;
-            _sniper.ThroughCoverHit += OnThroughCoverHit;
-            _sniper.MultiKill += OnMultiKill;
             _sniper.HealthChanged += OnHealthChanged;
             _sniper.Died += OnDied;
         }
@@ -57,10 +54,6 @@ namespace Source.Root
             _input.ShootButtonDown -= OnShootButtonDown;
             _gameLoopService.CameraRotationChanged -= OnCameraRotationChanged;
             _view.DamageRecived -= OnDamageRecived;
-            _sniper.HeadShot -= OnHeadShot;
-            _sniper.HipfireShot -= OnHipfireShot;
-            _sniper.ThroughCoverHit -= OnThroughCoverHit;
-            _sniper.MultiKill -= OnMultiKill;
             _sniper.HealthChanged -= OnHealthChanged;
             _sniper.Died -= OnDied;
         }
@@ -75,6 +68,8 @@ namespace Source.Root
 
         private async void OnShootButtonDown()
         {
+            SniperBulletService bulletService = new(_achievementFactory, _sniper.InAim);
+            _shootService.Shoot(bulletService);
             _gameLoopService.SniperShoot(_view.TargetOfCriminal, GunType.Rifle);
             await UniTask.WaitForSeconds(.35f);
             ExitOfAim();
@@ -85,23 +80,6 @@ namespace Source.Root
 
         private void OnDamageRecived(float damage, Vector3 point)
             => _sniper.TakeDamage(damage, point);
-
-        private void OnMultiKill(int killCount)
-        {
-            if (killCount < 3)
-                _achievementFactory.Create(AchievementsType.DoubleKill);
-            else
-                _achievementFactory.Create(AchievementsType.MultiKill);
-        }
-
-        private void OnThroughCoverHit()
-            => _achievementFactory.Create(AchievementsType.ThroughCoverHit);
-
-        private void OnHipfireShot()
-            => _achievementFactory.Create(AchievementsType.HipfireShot);
-
-        private void OnHeadShot()
-            => _achievementFactory.Create(AchievementsType.HeadShot);
 
         private void OnHealthChanged(float value)
             => _hudUpdateService.UpdateHealthBar(value);

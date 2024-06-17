@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Source.Root
 {
     public class Gun

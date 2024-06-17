@@ -1,7 +1,7 @@
-using Source.Codebase.Domain;
-using Source.Codebase.Services;
 using System;
 using System.Collections.Generic;
+using Source.Codebase.Domain;
+using Source.Codebase.Services;
 using UnityEngine;
 
 namespace Source.Root
@@ -10,10 +10,10 @@ namespace Source.Root
     {
         private readonly Criminal _criminal;
         private readonly CriminalView _view;
+        private readonly ShootService _shootService;
         private readonly GameLoopService _gameLoopService;
         private readonly DamageBarFactory _damageBarFactory;
         private readonly Dictionary<Type, State> _states;
-        private readonly GunFactory _gunFactory;
 
         private State _activeState;
         private Transform _sniper;
@@ -27,10 +27,10 @@ namespace Source.Root
         {
             _criminal = criminal;
             _view = view;
+            _shootService = new();
             _gameLoopService = gameLoopService;
             _damageBarFactory = damageBarFactory;
-            _gunFactory = gunFactory;
-            _gunFactory.Create(GunType.Pistol, _view.GunPoint);
+            gunFactory.Create(GunType.Pistol, _view.GunPoint, _shootService);
             State idleState = new IdleState(this);
             State detectingState = new DetectingState(this, view, _sniper);
             State lookingState = new LookingState(this, view);
@@ -66,6 +66,7 @@ namespace Source.Root
             _criminal.DamageProcessed -= OnDamageProcessed;
             _gameLoopService.SniperShot -= OnSniperShot;
             _gameLoopService.SniperDied -= OnSniperDied;
+            _view.Shot -= OnShot;
             _activeState?.Exit();
         }
 
@@ -89,7 +90,6 @@ namespace Source.Root
         private void OnSniperShot(Transform sniper)
         {
             _sniper = sniper;
-            _criminal.SetTarget(sniper);
             _view.SetTarget(sniper);
             SniperDetected?.Invoke();
         }
@@ -97,7 +97,14 @@ namespace Source.Root
         private void OnSniperDied()
             => Enter<IdleState>();
 
-        private void OnShot() { }
+        private void OnShot()
+        {
+            if (_sniper == null)
+                throw new Exception($"Null reference exception {nameof(_sniper)}");
+
+            CriminalBulletService bulletService = new(_sniper);
+            _shootService.Shoot(bulletService);
+        }
 
         private void OnDied()
         {
@@ -106,8 +113,6 @@ namespace Source.Root
         }
 
         private void OnDamageProcessed(float damage, Vector3 point)
-        {
-            _view.PlayHitAnimation(damage, point);
-        }
+            => _view.PlayHitAnimation(damage, point);
     }
 }

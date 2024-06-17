@@ -11,6 +11,9 @@ namespace Source.Root
         public void SetLocalRotation(Quaternion localRotation)
             => transform.localRotation = localRotation;
 
+        public void SetLocalPosition(Vector3 localPosition)
+            => transform.localPosition = localPosition;
+
         public void Shoot()
             => _muzzleFlash.Play();
     }
