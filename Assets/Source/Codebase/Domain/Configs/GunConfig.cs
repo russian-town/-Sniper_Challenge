@@ -16,5 +16,7 @@ namespace Source.Root
         [field: SerializeField] public BulletType BulletType { get; private set; }
         [field: SerializeField] public GunType Type { get; private set; }
         [field: SerializeField] public GunView Template { get; private set; }
+        [field: SerializeField] public Quaternion LocalRotation { get; private set; }
+        [field: SerializeField] public Vector3 LocalPosition { get; private set;}
     }
 }

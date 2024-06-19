@@ -10,6 +10,7 @@ namespace Source.Root
     {
         private readonly Criminal _criminal;
         private readonly CriminalView _view;
+        private readonly IStaticDataService _staticDataService;
         private readonly ShootService _shootService;
         private readonly GameLoopService _gameLoopService;
         private readonly DamageBarFactory _damageBarFactory;
@@ -21,16 +22,19 @@ namespace Source.Root
         public CriminalPresenter(
             Criminal criminal,
             CriminalView view,
+            IStaticDataService staticDataService,
             GameLoopService gameLoopService,
             DamageBarFactory damageBarFactory,
             GunFactory gunFactory)
         {
             _criminal = criminal;
             _view = view;
+            _staticDataService = staticDataService;
             _shootService = new();
             _gameLoopService = gameLoopService;
             _damageBarFactory = damageBarFactory;
-            gunFactory.Create(GunType.Pistol, _view.GunPoint, _shootService);
+            GunConfig config = _staticDataService.GetGunConfig(GunType.Pistol);
+            gunFactory.Create(config, _view.GunPoint, _shootService);
             State idleState = new IdleState(this);
             State detectingState = new DetectingState(this, view, _sniper);
             State lookingState = new LookingState(this, view);
@@ -57,6 +61,8 @@ namespace Source.Root
             _gameLoopService.SniperDied += OnSniperDied;
             _view.Shot += OnShot;
         }
+
+        public void LateUpdate(float tick) { }
 
         public void Disable()
         {

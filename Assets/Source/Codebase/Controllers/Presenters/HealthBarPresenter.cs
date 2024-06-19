@@ -23,6 +23,8 @@ namespace Source.Root
             _healthBar.ValueUpdated += OnValueUpdated;
         }
 
+        public void LateUpdate(float tick) { }
+
         public void Disable()
         {
             _updateService.HealthChanged -= OnHealthChanged;

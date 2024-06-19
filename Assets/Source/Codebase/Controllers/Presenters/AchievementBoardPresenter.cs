@@ -18,6 +18,8 @@ namespace Source.Root
         {
         }
 
+        public void LateUpdate(float tick) { }
+
         public void Disable()
         {
         }

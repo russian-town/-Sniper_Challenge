@@ -15,6 +15,10 @@ namespace Source.Root
 
         public bool InAim { get; private set; }
         public float StartHealth { get; private set; }
+        public float AimSpeed { get; private set; } = 8f;
+        public float IKWeight { get; private set; } = 1f;
+        public float AngleLimit { get; private set; } = 180f;
+        public float DistanceLimit { get; private set; } = 3f;
 
         public event Action<float> HealthChanged;
         public event Action Died;

@@ -7,6 +7,8 @@ namespace Source.Root
         [SerializeField] private ParticleSystem _muzzleFlash;
 
         [field: SerializeField] public Transform GunEnd {  get; private set; }
+        [field: SerializeField] public Transform LeftHandTarget { get; private set; }
+        [field: SerializeField] public Transform RightHandTarget { get; private set; }
 
         public void SetLocalRotation(Quaternion localRotation)
             => transform.localRotation = localRotation;

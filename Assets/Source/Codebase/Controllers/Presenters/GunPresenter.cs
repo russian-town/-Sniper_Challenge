@@ -1,5 +1,4 @@
 using Source.Codebase.Services.Abstract;
-using UnityEngine;
 
 namespace Source.Root
 {
@@ -25,15 +24,13 @@ namespace Source.Root
             _shootService = shootService;
         }
 
-        public void Enable() 
-        {
-            _shootService.Shot += OnShot;
-        }
+        public void Enable()
+            => _shootService.Shot += OnShot;
 
-        public void Disable() 
-        {
-            _shootService.Shot -= OnShot;
-        }
+        public void LateUpdate(float tick) { }
+
+        public void Disable()
+            => _shootService.Shot -= OnShot;
 
         private void OnShot(BulletServiceBase bulletService)
         {
@@ -43,12 +40,6 @@ namespace Source.Root
                 _view.GunEnd.position,
                 _config.BulletType,
                 bulletService);
-        }
-
-        private void SetCenter()
-        {
-            Vector2 center = new Vector2(Screen.width / 2f, Screen.height / 2f);
-            Ray ray = Camera.main.ScreenPointToRay(center);
         }
     }
 }

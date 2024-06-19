@@ -22,3 +22,5 @@ MonoBehaviour:
   <BulletType>k__BackingField: 0
   <Type>k__BackingField: 0
   <Template>k__BackingField: {fileID: 1573204989971743541, guid: cfe1e9cbac1b01f45a2721bedf63730c, type: 3}
+  <LocalRotation>k__BackingField: {x: -0.3233294, y: -0.6864476, z: -0.6441742, w: -0.09637019}
+  <LocalPosition>k__BackingField: {x: 0.237, y: 0.229, z: -0.035}

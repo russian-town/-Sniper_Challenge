@@ -9,7 +9,6 @@ namespace Source.Root
         public event Action AimEnter;
         public event Action AimExit;
         public event Action<GunType> Shot;
-        public event Action<float> CameraRotationChanged;
         public event Action<Transform> SniperShot;
         public event Action SniperDied;
 
@@ -27,8 +26,5 @@ namespace Source.Root
 
         public void CallEventOfSniperDied()
             => SniperDied?.Invoke();
-
-        public void CallCameraEvent(float angle)
-            => CameraRotationChanged?.Invoke(angle);
     }
 }

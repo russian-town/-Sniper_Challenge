@@ -29,6 +29,8 @@ namespace Source.Root
             _gameLoopService.Shot += OnShot;
         }
 
+        public void LateUpdate(float tick) { }
+
         public void Disable()
         {
             _gameLoopService.AimEnter -= OnAimEnter;

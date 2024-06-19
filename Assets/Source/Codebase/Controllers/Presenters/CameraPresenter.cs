@@ -45,6 +45,8 @@ namespace Source.Root
             _gameLoopService.Shot += OnShot;
         }
 
+        public void LateUpdate(float tick) { }
+
         public void Disable()
         {
             _input.AxisMoved -= OnAxisMoved;
@@ -74,7 +76,6 @@ namespace Source.Root
             _transform.position = _view.Target.position + offSet;
             _transform.LookAt(_view.Target);
             _view.SetRotation(_titleAngle);
-            _gameLoopService.CallCameraEvent(_transform.eulerAngles.y);
         }
     }
 }

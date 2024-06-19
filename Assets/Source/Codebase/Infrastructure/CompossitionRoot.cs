@@ -28,13 +28,18 @@ public class CompossitionRoot : MonoBehaviour
         GameLoopService gameLoopService = new();
         HudUpdateService hudUpdateService = new();
         BulletFactory bulletFactory = new(staticDataService);
-        GunFactory gunFactory = new(staticDataService, bulletFactory);
+        GunFactory gunFactory = new(bulletFactory);
         AchievementFactory achievementFactory =
             new(staticDataService, _canvas, new(0f, 540f, 0f));
         staticDataService.LoadConfigs(_levelConfigs);
         hudUpdateService.SetBloodOverlayImage(_bloodOverlay);
         CameraPresenter cameraPresenter =
-            new(_cameraView, _desktopInput, _levelConfigs.CameraConfig, _levelConfigs.InputData, gameLoopService, staticDataService);
+            new(_cameraView,
+            _desktopInput,
+            _levelConfigs.CameraConfig,
+            _levelConfigs.InputData,
+            gameLoopService,
+            staticDataService);
         _cameraView.Construct(cameraPresenter);
         Scope scope = new();
         ScopePresenter scopePresenter = new(scope, _scopeView, gameLoopService);
@@ -43,6 +48,7 @@ public class CompossitionRoot : MonoBehaviour
         SniperPresenter sniperPresenter =
             new(sniper,
             _sniperView,
+            staticDataService,
             _desktopInput,
             gameLoopService,
             hudUpdateService,
@@ -55,7 +61,12 @@ public class CompossitionRoot : MonoBehaviour
         DamageBarFactory damageBarFactory = new(staticDataService);
         Criminal criminal = new(10f);
         CriminalPresenter criminalPresenter =
-            new(criminal, _criminalView, gameLoopService, damageBarFactory, gunFactory);
+            new(criminal,
+            _criminalView,
+            staticDataService,
+            gameLoopService,
+            damageBarFactory,
+            gunFactory);
         _criminalView.Construct(criminalPresenter);
     }
 }

@@ -18,6 +18,8 @@ namespace Source.Root
             _view.Destroy();
         }
 
+        public void LateUpdate(float tick) { }
+
         public void Disable() { }
     }
 }

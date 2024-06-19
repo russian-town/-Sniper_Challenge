@@ -23,6 +23,9 @@ namespace Source.Root
         private void OnEnable()
             => _presenter?.Enable();
 
+        private void LateUpdate()
+            => _presenter?.LateUpdate(Time.deltaTime);
+
         private void OnDisable()
             => _presenter?.Disable();
     }

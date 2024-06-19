@@ -26,6 +26,8 @@ namespace Source.Root
             _bulletService.Fly(_bullet.Damage);
         }
 
+        public void LateUpdate(float tick) { }
+
         public void Disable()
         {
             _bulletService.PositionChanged -= OnPositionChanged;
