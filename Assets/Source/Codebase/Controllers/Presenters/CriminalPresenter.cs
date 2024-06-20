@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Source.Codebase.Domain;
 using Source.Codebase.Services;
 using UnityEngine;
 
@@ -10,7 +9,6 @@ namespace Source.Root
     {
         private readonly Criminal _criminal;
         private readonly CriminalView _view;
-        private readonly IStaticDataService _staticDataService;
         private readonly ShootService _shootService;
         private readonly GameLoopService _gameLoopService;
         private readonly DamageBarFactory _damageBarFactory;
@@ -24,20 +22,18 @@ namespace Source.Root
             Criminal criminal,
             CriminalView view,
             Transform target,
-            IStaticDataService staticDataService,
             GameLoopService gameLoopService,
             DamageBarFactory damageBarFactory,
-            GunFactory gunFactory)
+            GunFactory gunFactory,
+            GunConfig gunConfig)
         {
             _criminal = criminal;
             _view = view;
             _target = target;
-            _staticDataService = staticDataService;
             _shootService = new();
             _gameLoopService = gameLoopService;
             _damageBarFactory = damageBarFactory;
-            GunConfig config = _staticDataService.GetGunConfig(GunType.Pistol);
-            gunFactory.Create(config, _view.GunPoint, _shootService);
+            gunFactory.Create(gunConfig, _view.GunPoint, _shootService);
             _ikService =
                 new(_target, gunFactory.GetGunEnd(), _view.Animator, _view.Bones);
             State idleState = new IdleState(this);
@@ -53,8 +49,6 @@ namespace Source.Root
             };
             Enter<IdleState>();
         }
-
-        public event Action SniperDetected;
 
         public void Enable()
         {

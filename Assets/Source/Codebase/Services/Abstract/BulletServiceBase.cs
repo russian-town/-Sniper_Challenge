@@ -11,6 +11,7 @@ namespace Source.Codebase.Services.Abstract
         protected Vector3 Position { get; private set; }
 
         public event Action<Vector3> PositionChanged;
+        public event Action<Vector3> DirectionChanged;
 
         public abstract event Action FlightIsOver;
 
@@ -27,6 +28,9 @@ namespace Source.Codebase.Services.Abstract
 
         public async UniTask MoveTo(Vector3 target)
         {
+            Vector3 direction = (target - Position).normalized;
+            DirectionChanged?.Invoke(direction);
+
             while (Vector3.Distance(Position, target) > 0)
             {
                 Position =

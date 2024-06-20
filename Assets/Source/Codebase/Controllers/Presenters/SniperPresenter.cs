@@ -52,6 +52,7 @@ namespace Source.Root
             _sniper.HealthChanged += OnHealthChanged;
             _sniper.Died += OnDied;
             _ikService.Initialize();
+            _gameLoopService.CallEventOfSniperCreated(_view.transform);
         }
 
         public void LateUpdate(float tick)

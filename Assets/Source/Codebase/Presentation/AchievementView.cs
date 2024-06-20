@@ -11,7 +11,6 @@ namespace Source.Root
     {
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private Image _image;
-        [SerializeField] private float _duration = .5f;
         [SerializeField] private TMP_Text _name;
         [SerializeField] private TMP_Text _score;
         [SerializeField] private RectTransform _rectTransform;

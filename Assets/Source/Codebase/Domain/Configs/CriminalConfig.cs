@@ -1,18 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CriminalConfig : MonoBehaviour
+namespace Source.Codebase.Domain.Configs
 {
-    // Start is called before the first frame update
-    void Start()
+    public class CriminalConfig : ScriptableObject
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

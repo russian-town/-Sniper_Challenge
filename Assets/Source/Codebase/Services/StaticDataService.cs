@@ -21,18 +21,17 @@ namespace Source.Root
             _bulletConfigByType = new();
         }
 
-        public void LoadConfigs(LevelConfigs levelConfig)
+        public void LoadConfigs(GameConfig gameConfig)
         {
-            LoadAchievementConfigs(levelConfig.AchievementsConfigs);
-            LoadBulletConfigs(levelConfig.BulletConfigs);
-            LoadGunConfigs(levelConfig.GunConfigs);
+            LoadAchievementConfigs(gameConfig.AchievementsConfigs);
+            LoadBulletConfigs(gameConfig.BulletConfigs);
+            LoadGunConfigs(gameConfig.GunConfigs);
 
             _viewTemplateByTypes.Clear();
-            _viewTemplateByTypes.Add(typeof(GunView), levelConfig.GunViewTemplate);
-            _viewTemplateByTypes.Add(typeof(CriminalView), levelConfig.CriminalViewTemplate);
-            _viewTemplateByTypes.Add(typeof(BulletView), levelConfig.BulletViewTemplate);
-            _viewTemplateByTypes.Add(typeof(DamageBarView), levelConfig.DamageBarViewTemplate);
-            _viewTemplateByTypes.Add(typeof(AchievementView), levelConfig.AchievementsView);
+            _viewTemplateByTypes.Add(typeof(SniperView), gameConfig.SniperViewTemplate);
+            _viewTemplateByTypes.Add(typeof(BulletView), gameConfig.BulletViewTemplate);
+            _viewTemplateByTypes.Add(typeof(DamageBarView), gameConfig.DamageBarViewTemplate);
+            _viewTemplateByTypes.Add(typeof(AchievementView), gameConfig.AchievementsView);
         }
 
         public T GetViewTemplate<T>() where T : MonoBehaviour

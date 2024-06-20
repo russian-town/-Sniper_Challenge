@@ -14,6 +14,7 @@ namespace Source.Root
         private readonly GameLoopService _gameLoopService;
         private readonly StaticDataService _staticDataService;
 
+        private Transform _target;
         private float _currentXVelocity;
         private float _currentYVelocity;
         private float _smoothX;
@@ -43,6 +44,7 @@ namespace Source.Root
         {
             _input.AxisMoved += OnAxisMoved;
             _gameLoopService.Shot += OnShot;
+            _gameLoopService.SniperCreated += OnSniperCreated;
         }
 
         public void LateUpdate(float tick) { }
@@ -51,6 +53,7 @@ namespace Source.Root
         {
             _input.AxisMoved -= OnAxisMoved;
             _gameLoopService.Shot -= OnShot;
+            _gameLoopService.SniperCreated -= OnSniperCreated;
         } 
 
         private void OnAxisMoved(float horizontal, float vertical)
@@ -62,8 +65,14 @@ namespace Source.Root
             _view.PlayRecoil(gunConfig.RecoilForce);
         }
 
+        private void OnSniperCreated(Transform sniper)
+            => _target = sniper;
+
         private void RotateCamera(float horizontal, float vertical)
         {
+            if (_target == null)
+                return;
+
             _smoothX =
                     Mathf.SmoothDamp(_smoothX, horizontal, ref _currentXVelocity, _config.TurnSmooth);
             _smoothY =
@@ -73,8 +82,8 @@ namespace Source.Root
             _titleAngle -= _smoothY * _data.SensitivityOfTitleAngle;
             _titleAngle = Mathf.Clamp(_titleAngle, _config.MinTitleAngle, _config.MaxTitleAngle);
             Vector3 offSet = Quaternion.AngleAxis(_lookAngle + 180f, Vector3.up) * Vector3.one;
-            _transform.position = _view.Target.position + offSet;
-            _transform.LookAt(_view.Target);
+            _transform.position = _target.position + offSet;
+            _transform.LookAt(_target);
             _view.SetRotation(_titleAngle);
         }
     }

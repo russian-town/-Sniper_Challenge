@@ -10,6 +10,7 @@ namespace Source.Root
         public event Action AimExit;
         public event Action<GunType> Shot;
         public event Action SniperShot;
+        public event Action<Transform> SniperCreated;
         public event Action SniperDied;
 
         public void EnterToAim()
@@ -23,6 +24,9 @@ namespace Source.Root
             Shot?.Invoke(gunType);
             SniperShot?.Invoke();
         }
+
+        public void CallEventOfSniperCreated(Transform sniper)
+            => SniperCreated?.Invoke(sniper);
 
         public void CallEventOfSniperDied()
             => SniperDied?.Invoke();
