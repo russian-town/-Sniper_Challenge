@@ -63,6 +63,7 @@ public class CompossitionRoot : MonoBehaviour
         CriminalPresenter criminalPresenter =
             new(criminal,
             _criminalView,
+            _sniperView.TargetOfCriminal,
             staticDataService,
             gameLoopService,
             damageBarFactory,

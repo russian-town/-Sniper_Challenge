@@ -14,14 +14,16 @@ namespace Source.Root
         private readonly ShootService _shootService;
         private readonly GameLoopService _gameLoopService;
         private readonly DamageBarFactory _damageBarFactory;
+        private readonly IKService _ikService;
         private readonly Dictionary<Type, State> _states;
+        private readonly Transform _target;
 
         private State _activeState;
-        private Transform _sniper;
 
         public CriminalPresenter(
             Criminal criminal,
             CriminalView view,
+            Transform target,
             IStaticDataService staticDataService,
             GameLoopService gameLoopService,
             DamageBarFactory damageBarFactory,
@@ -29,16 +31,19 @@ namespace Source.Root
         {
             _criminal = criminal;
             _view = view;
+            _target = target;
             _staticDataService = staticDataService;
             _shootService = new();
             _gameLoopService = gameLoopService;
             _damageBarFactory = damageBarFactory;
             GunConfig config = _staticDataService.GetGunConfig(GunType.Pistol);
             gunFactory.Create(config, _view.GunPoint, _shootService);
+            _ikService =
+                new(_target, gunFactory.GetGunEnd(), _view.Animator, _view.Bones);
             State idleState = new IdleState(this);
-            State detectingState = new DetectingState(this, view, _sniper);
+            State detectingState = new DetectingState(this);
             State lookingState = new LookingState(this, view);
-            State shootingState = new ShootingState(this, view);
+            State shootingState = new ShootingState(this, _ikService, view);
             _states = new Dictionary<Type, State>
             {
                 { idleState.GetType(), idleState },
@@ -62,7 +67,8 @@ namespace Source.Root
             _view.Shot += OnShot;
         }
 
-        public void LateUpdate(float tick) { }
+        public void LateUpdate(float tick) 
+            => _activeState?.Update();
 
         public void Disable()
         {
@@ -93,22 +99,18 @@ namespace Source.Root
         private void OnHealthChanged(float currentHealth)
             => _view.UpdateHealth(currentHealth);
 
-        private void OnSniperShot(Transform sniper)
-        {
-            _sniper = sniper;
-            _view.SetTarget(sniper);
-            SniperDetected?.Invoke();
-        }
+        private void OnSniperShot()
+            => Enter<LookingState>();
 
         private void OnSniperDied()
             => Enter<IdleState>();
 
         private void OnShot()
         {
-            if (_sniper == null)
-                throw new Exception($"Null reference exception {nameof(_sniper)}");
+            if (_target == null)
+                throw new Exception($"Null reference exception {nameof(_target)}");
 
-            CriminalBulletService bulletService = new(_sniper);
+            CriminalBulletService bulletService = new(_target);
             _shootService.Shoot(bulletService);
         }
 

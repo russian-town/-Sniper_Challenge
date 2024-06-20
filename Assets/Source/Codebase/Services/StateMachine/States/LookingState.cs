@@ -17,6 +17,7 @@ namespace Source.Root
         {
             _view.FindSniper();
             await UniTask.Delay(TimeSpan.FromSeconds(2f));
+            _view.CancelFind();
             StateMachine.Enter<DetectingState>();
         }
 

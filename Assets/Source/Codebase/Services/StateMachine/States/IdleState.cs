@@ -4,13 +4,8 @@ namespace Source.Root
     {
         public IdleState(IStateMachine stateMachine) : base(stateMachine) { }
 
-        public override void Enter()
-            => StateMachine.SniperDetected += OnSniperDetected;
+        public override void Enter() { }
 
-        public override void Exit()
-            => StateMachine.SniperDetected -= OnSniperDetected;
-
-        private void OnSniperDetected()
-            => StateMachine.Enter<LookingState>();
+        public override void Exit() { }
     }
 }

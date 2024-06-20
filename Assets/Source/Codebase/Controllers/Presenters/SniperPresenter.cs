@@ -17,8 +17,7 @@ namespace Source.Root
         private readonly AchievementFactory _achievementFactory;
         private readonly HudUpdateService _hudUpdateService;
         private readonly GunFactory _gunFactory;
-        private readonly Transform _gunEnd;
-        private readonly int _iterations = 10;
+        private readonly IKService _ikService;
 
         public SniperPresenter(
             Sniper sniper,
@@ -36,13 +35,13 @@ namespace Source.Root
             _shootService = new();
             _input = input;
             _gameLoopService = gameLoopService;
-            _view.Initialize();
             _achievementFactory = achievementFactory;
             _hudUpdateService = hudUpdateService;
             GunConfig config = _staticDataService.GetGunConfig(GunType.Rifle);
             _gunFactory = gunFactory;
             _gunFactory.Create(config, _view.GunPoint, _shootService);
-            _gunEnd = _gunFactory.GetGunEnd();
+            _ikService =
+                new(_view.Center, _gunFactory.GetGunEnd(), _view.Animator, _view.HumanBones);
         }
 
         public void Enable()
@@ -52,6 +51,7 @@ namespace Source.Root
             _view.DamageRecived += OnDamageRecived;
             _sniper.HealthChanged += OnHealthChanged;
             _sniper.Died += OnDied;
+            _ikService.Initialize();
         }
 
         public void LateUpdate(float tick)
@@ -66,47 +66,7 @@ namespace Source.Root
                     Vector3.Lerp(_view.Center.position, hitInfo.point, step);
             }
 
-            Vector3 targetPosition = GetTargetPosition();
-
-            for (int i = 0; i < _iterations; i++)
-            {
-                for (int j = 0; j < _view.BonesTransform.Count; j++)
-                {
-                    float boneWeight = _view.HumanBones[j].Wight * _sniper.IKWeight;
-                    AimAtTarget(_view.BonesTransform[j], targetPosition, boneWeight);
-                }
-            }
-        }
-
-        private Vector3 GetTargetPosition()
-        {
-            Vector3 targetDirection = _view.Center.position - _gunEnd.position;
-            Vector3 aimDirection = _gunEnd.forward;
-            float blendOut = 0f;
-            float targetAngle = Vector3.Angle(targetDirection, aimDirection);
-
-            if(targetAngle >  _sniper.AngleLimit)
-                blendOut += (targetAngle - _sniper.AngleLimit) / 50f;
-
-            float targetDistance = targetDirection.magnitude;
-
-            if (targetDistance < _sniper.DistanceLimit)
-                blendOut += _sniper.DistanceLimit - targetDistance;
-
-            Vector3 direction =
-                Vector3.Slerp(targetDirection, aimDirection, blendOut);
-            return _gunEnd.position + direction;
-        }
-
-        private void AimAtTarget(Transform bone, Vector3 targetPosition, float wieght)
-        {
-            Vector3 aimDirection = _gunEnd.forward;
-            Vector3 targetDirection = targetPosition - _gunEnd.position;
-            Quaternion aimTowards =
-                Quaternion.FromToRotation(aimDirection, targetDirection);
-            Quaternion blendedRotation =
-                Quaternion.Slerp(Quaternion.identity, aimTowards, wieght);
-            bone.rotation = blendedRotation * bone.rotation;
+            _ikService.UpdateBones(_sniper.IKWeight, _sniper.AngleLimit, _sniper.DistanceLimit);
         }
 
         public void Disable()
@@ -130,7 +90,7 @@ namespace Source.Root
         {
             SniperBulletService bulletService = new(_achievementFactory, _sniper.InAim);
             _shootService.Shoot(bulletService);
-            _gameLoopService.SniperShoot(_view.TargetOfCriminal, GunType.Rifle);
+            _gameLoopService.SniperShoot(GunType.Rifle);
             await UniTask.WaitForSeconds(.35f);
             ExitOfAim();
         }
