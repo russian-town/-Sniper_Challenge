@@ -21,6 +21,6 @@ MonoBehaviour:
   <ScopeSprite>k__BackingField: {fileID: 0}
   <BulletType>k__BackingField: 0
   <Type>k__BackingField: 0
-  <Template>k__BackingField: {fileID: 1573204989971743541, guid: cfe1e9cbac1b01f45a2721bedf63730c, type: 3}
-  <LocalRotation>k__BackingField: {x: -0.3233294, y: -0.6864476, z: -0.6441742, w: -0.09637019}
-  <LocalPosition>k__BackingField: {x: 0.237, y: 0.229, z: -0.035}
+  <Template>k__BackingField: {fileID: 7014377902789854319, guid: 537b3fbc701998a46b42400053d90b77, type: 3}
+  <LocalRotation>k__BackingField: {x: 0.25362328, y: 0.19257456, z: -0.9465346, w: 0.051600263}
+  <LocalPosition>k__BackingField: {x: -0.367, y: 0.16, z: 0.139}

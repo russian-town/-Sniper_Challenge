@@ -2272,9 +2272,11 @@ MonoBehaviour:
   <Animator>k__BackingField: {fileID: 399074655013798405}
   <Agent>k__BackingField: {fileID: 4685850364928245987}
   <Bones>k__BackingField:
-  - _wight: 0.2
+  - _wight: 1
+    <Bone>k__BackingField: 0
+  - _wight: 1
     <Bone>k__BackingField: 7
-  - _wight: 0.5
+  - _wight: 1
     <Bone>k__BackingField: 8
   - _wight: 1
     <Bone>k__BackingField: 54

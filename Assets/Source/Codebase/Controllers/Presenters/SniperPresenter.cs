@@ -67,7 +67,7 @@ namespace Source.Root
                     Vector3.Lerp(_view.Center.position, hitInfo.point, step);
             }
 
-            _ikService.UpdateBones(_sniper.IKWeight, _sniper.AngleLimit, _sniper.DistanceLimit);
+            //_ikService.UpdateBones(_sniper.IKWeight, _sniper.AngleLimit, _sniper.DistanceLimit);
         }
 
         public void Disable()
