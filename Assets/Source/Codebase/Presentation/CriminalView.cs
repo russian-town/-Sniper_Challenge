@@ -1,5 +1,4 @@
 using System;
-using Source.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,7 +14,6 @@ namespace Source.Root
 
         [field: SerializeField] public Animator Animator { get; private set; }
         [field: SerializeField] public NavMeshAgent Agent { get; private set; }
-        [field: SerializeField] public HumaneBone[] Bones { get; private set; }
         [field: SerializeField] public Transform DamageViewPoint { get; private set; }
         [field: SerializeField] public Transform GunPoint { get; private set; }
 

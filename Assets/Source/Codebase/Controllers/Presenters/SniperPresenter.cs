@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Source.Codebase.Domain;
 using Source.Codebase.Services;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Source.Root
 {
@@ -16,7 +17,6 @@ namespace Source.Root
         private readonly GameLoopService _gameLoopService;
         private readonly AchievementFactory _achievementFactory;
         private readonly HudUpdateService _hudUpdateService;
-        private readonly GunFactory _gunFactory;
         private readonly IKService _ikService;
 
         public SniperPresenter(
@@ -33,15 +33,17 @@ namespace Source.Root
             _view = view;
             _staticDataService = staticDataService;
             _shootService = new();
+            _ikService = new();
             _input = input;
             _gameLoopService = gameLoopService;
             _achievementFactory = achievementFactory;
             _hudUpdateService = hudUpdateService;
             GunConfig config = _staticDataService.GetGunConfig(GunType.Rifle);
-            _gunFactory = gunFactory;
-            _gunFactory.Create(config, _view.GunPoint, _shootService);
-            _ikService =
-                new(_view.Center, _gunFactory.GetGunEnd(), _view.Animator, _view.HumanBones);
+            gunFactory.Create(
+                config,
+                _view.GunPoint,
+                _shootService,
+                _ikService);
         }
 
         public void Enable()
@@ -51,7 +53,7 @@ namespace Source.Root
             _view.DamageRecived += OnDamageRecived;
             _sniper.HealthChanged += OnHealthChanged;
             _sniper.Died += OnDied;
-            _ikService.Initialize();
+            _ikService.HandsTargetsInitialized += OnHandsTargetsInitialized;
             _gameLoopService.CallEventOfSniperCreated(_view.transform);
         }
 
@@ -66,8 +68,6 @@ namespace Source.Root
                 _view.Center.position =
                     Vector3.Lerp(_view.Center.position, hitInfo.point, step);
             }
-
-            //_ikService.UpdateBones(_sniper.IKWeight, _sniper.AngleLimit, _sniper.DistanceLimit);
         }
 
         public void Disable()
@@ -77,6 +77,7 @@ namespace Source.Root
             _view.DamageRecived -= OnDamageRecived;
             _sniper.HealthChanged -= OnHealthChanged;
             _sniper.Died -= OnDied;
+            _ikService.HandsTargetsInitialized -= OnHandsTargetsInitialized;
         }
 
         private async void OnAimButtonDown()
@@ -104,6 +105,15 @@ namespace Source.Root
 
         private void OnDied()
             => _gameLoopService.CallEventOfSniperDied();
+
+        private void OnHandsTargetsInitialized(
+            Transform rightHandTarget,
+            Transform leftHandTarget,
+            Transform gun)
+            => _view.InitializeHandsConstraint(
+                rightHandTarget,
+                leftHandTarget,
+                gun);
 
         private async UniTask EnterToAim()
         {

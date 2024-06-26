@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Source.Root
 {
@@ -6,6 +7,7 @@ namespace Source.Root
     {
         [SerializeField] private ParticleSystem _muzzleFlash;
 
+        [field: SerializeField] public Transform Transform {  get; private set; }
         [field: SerializeField] public Transform GunEnd {  get; private set; }
         [field: SerializeField] public Transform LeftHandTarget { get; private set; }
         [field: SerializeField] public Transform RightHandTarget { get; private set; }

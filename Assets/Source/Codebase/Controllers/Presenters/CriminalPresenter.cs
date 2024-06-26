@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Source.Codebase.Services;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Source.Root
 {
@@ -11,8 +12,8 @@ namespace Source.Root
         private readonly CriminalView _view;
         private readonly ShootService _shootService;
         private readonly GameLoopService _gameLoopService;
-        private readonly DamageBarFactory _damageBarFactory;
         private readonly IKService _ikService;
+        private readonly DamageBarFactory _damageBarFactory;
         private readonly Dictionary<Type, State> _states;
         private readonly Transform _target;
 
@@ -31,15 +32,18 @@ namespace Source.Root
             _view = view;
             _target = target;
             _shootService = new();
+            _ikService = new();
             _gameLoopService = gameLoopService;
             _damageBarFactory = damageBarFactory;
-            gunFactory.Create(gunConfig, _view.GunPoint, _shootService);
-            _ikService =
-                new(_target, gunFactory.GetGunEnd(), _view.Animator, _view.Bones);
+            gunFactory.Create(
+                gunConfig,
+                _view.GunPoint,
+                _shootService,
+                _ikService);
             State idleState = new IdleState(this);
             State detectingState = new DetectingState(this);
             State lookingState = new LookingState(this, view);
-            State shootingState = new ShootingState(this, _ikService, view);
+            State shootingState = new ShootingState(this, view);
             _states = new Dictionary<Type, State>
             {
                 { idleState.GetType(), idleState },
@@ -59,6 +63,7 @@ namespace Source.Root
             _gameLoopService.SniperShot += OnSniperShot;
             _gameLoopService.SniperDied += OnSniperDied;
             _view.Shot += OnShot;
+            _ikService.HandsTargetsInitialized += OnHandsTargetsInitialized;
         }
 
         public void LateUpdate(float tick) 
@@ -73,6 +78,7 @@ namespace Source.Root
             _gameLoopService.SniperShot -= OnSniperShot;
             _gameLoopService.SniperDied -= OnSniperDied;
             _view.Shot -= OnShot;
+            _ikService.HandsTargetsInitialized -= OnHandsTargetsInitialized;
             _activeState?.Exit();
         }
 
@@ -106,6 +112,13 @@ namespace Source.Root
 
             CriminalBulletService bulletService = new(_target);
             _shootService.Shoot(bulletService);
+        }
+
+        private void OnHandsTargetsInitialized(
+            Transform rightHandTarget,
+            Transform leftHandTarget,
+            Transform weightedTransform)
+        {
         }
 
         private void OnDied()

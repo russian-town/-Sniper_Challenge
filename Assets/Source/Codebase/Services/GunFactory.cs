@@ -8,8 +8,6 @@ namespace Source.Codebase.Services
     {
         private readonly BulletFactory _bulletFactory;
 
-        private GunView _gunView;
-
         public GunFactory(BulletFactory bulletFactory)
         {
             _bulletFactory = bulletFactory;
@@ -18,20 +16,17 @@ namespace Source.Codebase.Services
         public void Create(
             GunConfig config,
             Transform parent,
-            IShootService shootService)
+            IShootService shootService,
+            IKService ikService)
         { 
             GunView template = config.Template;
             Gun gun = new(config);
             GunView view = Object.Instantiate(template, parent);
-            _gunView = view;
             view.SetLocalPosition(config.LocalPosition);
             view.SetLocalRotation(config.LocalRotation);
             GunPresenter gunPresenter =
-                new(gun, view, config, _bulletFactory, shootService);
+                new(gun, view, config, _bulletFactory, shootService, ikService);
             view.Construct(gunPresenter);
         }
-
-        public Transform GetGunEnd()
-            => _gunView.GunEnd;
     }
 }

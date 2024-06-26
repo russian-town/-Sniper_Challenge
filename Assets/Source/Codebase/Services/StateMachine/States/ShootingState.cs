@@ -7,25 +7,20 @@ namespace Source.Root
 {
     public class ShootingState : State
     {
-        private readonly IKService _ikService;
         private readonly CriminalView _view;
         private readonly CancellationTokenSource _token;
 
         public ShootingState(
             IStateMachine stateMachine,
-            IKService ikService,
             CriminalView view)
             : base(stateMachine)
         {
-            _ikService = ikService;
             _view = view;
             _token = new();
         }
 
         public async override void Enter()
         {
-            _ikService.Initialize();
-
             while (!_token.IsCancellationRequested)
             {
                 _view.Shoot();
@@ -33,8 +28,7 @@ namespace Source.Root
             }
         }
 
-        public override void Update()
-            => _ikService.UpdateBones(1f, 180f, 3f);
+        public override void Update() { }
 
         public override void Exit()
             => _token.Cancel();

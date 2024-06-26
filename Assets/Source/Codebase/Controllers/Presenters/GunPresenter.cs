@@ -1,3 +1,4 @@
+using Source.Codebase.Services;
 using Source.Codebase.Services.Abstract;
 
 namespace Source.Root
@@ -9,23 +10,32 @@ namespace Source.Root
         private readonly GunConfig _config;
         private readonly BulletFactory _bulletFactory;
         private readonly IShootService _shootService;
+        private readonly IKService _ikService;
 
         public GunPresenter(
             Gun gun,
             GunView view,
             GunConfig config,
             BulletFactory bulletFactory,
-            IShootService shootService)
+            IShootService shootService,
+            IKService ikService)
         {
             _view = view;
             _gun = gun;
             _config = config;
             _bulletFactory = bulletFactory;
             _shootService = shootService;
+            _ikService = ikService;
         }
 
         public void Enable()
-            => _shootService.Shot += OnShot;
+        {
+            _shootService.Shot += OnShot;
+            _ikService.InitializeTargets(
+                _view.RightHandTarget,
+                _view.LeftHandTarget,
+                _view.Transform);
+        }
 
         public void LateUpdate(float tick) { }
 
